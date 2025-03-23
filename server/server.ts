@@ -9,6 +9,7 @@ import path from "path";
 import { MyContext } from "./interfaces";
 import connection from "./database/db";
 import "dotenv/config";
+import { ArticlesAPI } from "./datasource/index";
 
 const PORT = process.env.PORT || 5000;
 
@@ -40,7 +41,10 @@ const startServer = async () => {
      * an Apollo Server instance and optional configuration options
      */
     expressMiddleware(server, {
-      context: async ({ req }) => ({ token: req.headers.token }),
+      context: async () => {
+        const { cache } = server;
+        return { dataSources: { articlesAPI: new ArticlesAPI({ cache }) } };
+      },
     }),
   );
 
