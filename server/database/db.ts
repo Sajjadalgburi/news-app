@@ -1,14 +1,19 @@
-import mongoose from "mongoose";
+/**
+ * This file connects to a local database in development and
+ * the the real databse if in production
+ */
 
-// todo : add proper mongo db string
-const uri = process.env.MONGODB_URI || "";
+import mongoose, { Connection } from "mongoose";
+import "dotenv/config";
 
-export const connectToDb = async () => {
-  try {
-    await mongoose.connect(uri);
-    console.log(" ---- MongoDB connected ---- ");
-  } catch (error) {
-    console.error("MongoDB connection error:", error);
-    process.exit(1);
-  }
-};
+const uri =
+  process.env.MODE === "development"
+    ? // This is a local database server for testing purposes
+      "mongodb://127.0.0.1:27017/news-app"
+    : process.env.MONGO_URI;
+
+mongoose.connect(uri);
+
+const connection = mongoose.connection;
+
+export default connection as Connection;
