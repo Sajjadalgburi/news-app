@@ -1,5 +1,8 @@
+# refer to https://newsapi.org/docs/endpoints/top-headlines for types from the API doc
+
 type Query {
-  displayTrendingArticles: [Article!]!
+  # This query is for showcasing the hotest trends on the homepage
+  displayTrendingArticles: [Article]! #must be an array of non-null
 }
 
 type Article {
@@ -7,24 +10,24 @@ type Article {
   title: String!
   # A description or snippet from the article.
   description: String!
-  # The unformatted content of the article, where available. This is truncated to 200 chars.
-  content: String!
-  # The date and time that the article was published, in UTC (+000)
+  # The date and time that the article was published, in UTC (+000).
   publishedAt: String!
-  # The identifier id and a display name name for the source this article came from.
+  # The source from which this article originated.
   source: Source!
+  # The unformatted content of the article (where available). This is truncated to 200 characters.
+  content: String
   # The URL to a relevant image for the article.
-  image: String
-  # The author of the article. Can be null
+  urlToImage: String
+  # The author of the article. Can be null.
   author: String
   # The direct URL to the article.
-  url: String
+  url: String!
 }
 
-# This is the sources the aricle`s come from
+# Represents the source of the article.
 type Source {
-  # display name name
+  # The display name of the source.
   name: String!
-  # The identifier id
+  # The identifier of the source. Can be null.
   id: String
 }
