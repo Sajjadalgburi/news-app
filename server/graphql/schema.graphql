@@ -31,3 +31,12 @@ type Source {
   # The identifier of the source. Can be null.
   id: String
 }
+
+type User {
+  # ID field. Will be populated from MONGODB
+  id: ID!
+  # name of the user
+  name: String!
+  # the users email
+  email: String!
+}
