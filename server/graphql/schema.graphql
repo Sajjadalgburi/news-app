@@ -1,8 +1,8 @@
 # refer to https://newsapi.org/docs/endpoints/top-headlines for types from the API doc
 
 type Query {
-  # This query is for showcasing the hotest trends on the homepage
-  displayTrendingArticles: [Article]! #must be an array of non-null
+  # This query is for showcasing the hottest trends on the homepage
+  displayTrendingArticles: [Article]! # must be an array of non-null
 }
 
 type Article {
@@ -12,7 +12,7 @@ type Article {
   publishedAt: String!
   # The source from which this article originated.
   source: Source!
-  # The direct URL to the article.
+  # The direct URL to the article. Used to associate comments.
   url: String!
   # A description or snippet from the article.
   description: String
@@ -22,6 +22,8 @@ type Article {
   image: String
   # The author of the article. Can be null.
   author: String
+  # Fetches all comments related to this article by matching the URL.
+  comments: [Comment]
 }
 
 # Represents the source of the article.
@@ -33,10 +35,28 @@ type Source {
 }
 
 type User {
-  # ID field. Will be populated from MONGODB
+  # ID field. Will be populated from MongoDB
   id: ID!
-  # name of the user
+  # Name of the user
   name: String!
-  # the users email
+  # The user's email
   email: String!
+  # The user's past comments
+  comments: [Comment]
+}
+
+# Represents a user comment on an article
+type Comment {
+  # Unique identifier for the comment
+  id: ID!
+  # The URL of the article this comment belongs to (instead of an article ID)
+  articleUrl: String!
+  # The text content of the comment
+  content: String!
+  # The user who wrote the comment
+  user: User!
+  # Number of upvotes the comment has received
+  upvote: Int
+  # Number of downvotes the comment has received
+  downvote: Int
 }
