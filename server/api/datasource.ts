@@ -55,10 +55,15 @@ export class ArticlesAPI extends RESTDataSource {
    * @param question
    * @returns
    */
-  async getArticlesBasedOnSearch(question: string): Promise<ArticleModel[]> {
+  async getArticlesBasedOnSearch(question: string): Promise<ArticleModel[] | null> {
     const response = await this.get<NewsAPIResponse>(
       `?apiKey=${apiKey}&country=us&q=${encodeURIComponent(question)}`
     );
+
+    if (!response.articles.length || response.status !== "ok") {
+      return null;
+    }
+
     return response.articles;
   }
 }
