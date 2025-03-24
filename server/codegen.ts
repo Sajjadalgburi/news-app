@@ -1,3 +1,5 @@
+import type { CodegenConfig } from "@graphql-codegen/cli";
+
 /**
  * GraphQL Codegen Configuration
  *
@@ -7,9 +9,6 @@
  * 3. Output the generated types to ./types/types.ts
  *
  */
-
-import type { CodegenConfig } from "@graphql-codegen/cli";
-
 const config: CodegenConfig = {
   schema: "./graphql/schema.graphql",
   generates: {
@@ -18,7 +17,10 @@ const config: CodegenConfig = {
       config: {
         contextType: "../context/index#DataSourceContext",
         mappers: {
-          // Track: "./models#TrackModel",
+          Article: "./types/models.d.ts#ArticleModel",
+          User: "./types/models.d.ts#UserModel",
+          Comment: "./types/models.d.ts#CommentModel",
+          Source: "./types/models.d.ts#SourceModel",
         },
       },
     },
