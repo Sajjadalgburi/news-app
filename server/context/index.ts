@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { ArticlesAPI } from "../api/datasource";
 
 /**
@@ -5,11 +6,15 @@ import { ArticlesAPI } from "../api/datasource";
  * This ensures type safety when accessing data sources within GraphQL resolvers.
  */
 export type DataSourceContext = {
-  user?: {
+  expressObjects: {
+    req: Request;
+    res: Response;
+  };
+  user: {
     id: string;
     name: string;
     email: string;
-  };
+  } | null;
   dataSources: {
     articlesAPI: ArticlesAPI;
   };
