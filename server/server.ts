@@ -40,9 +40,20 @@ const startServer = async () => {
      * an Apollo Server instance and optional configuration options
      */
     expressMiddleware(server, {
-      context: async () => {
+      context: async ({ req }) => {
         const { cache } = server;
-        return { dataSources: { articlesAPI: new ArticlesAPI({ cache }) } };
+
+        // todo : will remove later
+        const fakeUser = {
+          id: "1",
+          email: "",
+          name: "",
+        };
+
+        return {
+          user: { ...fakeUser },
+          dataSources: { articlesAPI: new ArticlesAPI({ cache }) },
+        };
       },
     }),
   );
