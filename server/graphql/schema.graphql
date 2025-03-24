@@ -13,6 +13,11 @@ type Query {
   me: User!
 }
 
+type Mutation {
+  # Mutation to log in the user - returns an Auth object which will update the cookies
+  login(email: String!, password: String!): Auth!
+}
+
 type Article {
   # The headline or title of the article.
   title: String!
@@ -51,6 +56,13 @@ type User {
   email: String!
   # The user's past comments
   comments: [Comment]
+}
+
+type Auth {
+  # The user that was authenticated
+  user: User!
+  # The token that was generated for the user
+  token: String!
 }
 
 # Represents a user comment on an article
