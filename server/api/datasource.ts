@@ -1,6 +1,7 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
 import "dotenv/config";
-import { categoryTypes } from "../types";
+import { categoryTypes, NewsAPIResponse } from "../types";
+import { ArticleModel } from "../types/models";
 const apiKey = process.env.NEWS_API_KEY;
 
 /**
@@ -13,8 +14,9 @@ export class ArticlesAPI extends RESTDataSource {
   // !
   baseURL = `https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&country=us`;
 
-  getHomePageArticles() {
-    return this.get("");
+  async getHomePageArticles(): Promise<ArticleModel[]> {
+    const response = await this.get<NewsAPIResponse>("");
+    return response.articles;
   }
 
   /**
@@ -22,8 +24,11 @@ export class ArticlesAPI extends RESTDataSource {
    * @param title
    * @returns single array[0]. This is the value closest to the search
    */
-  getSingleArticle(title: string) {
-    return this.get(`&q=${encodeURIComponent(title)}`);
+  async getSingleArticle(title: string): Promise<ArticleModel> {
+    const response = await this.get<NewsAPIResponse>(
+      `&q=${encodeURIComponent(title)}`,
+    );
+    return response.articles[0]; // Return the first article
   }
 
   /**
@@ -32,8 +37,11 @@ export class ArticlesAPI extends RESTDataSource {
    * @param category
    * @returns An array of articles in the given catagory
    */
-  getCategory(category: categoryTypes) {
-    return this.get(`?apiKey=${apiKey}&country=us&category=${category}`);
+  async getCategory(category: categoryTypes): Promise<ArticleModel[]> {
+    const response = await this.get<NewsAPIResponse>(
+      `?apiKey=${apiKey}&country=us&category=${category}`,
+    );
+    return response.articles;
   }
 
   /**
@@ -41,9 +49,10 @@ export class ArticlesAPI extends RESTDataSource {
    * @param question
    * @returns
    */
-  getArticlesBasedOnSearch(question: string) {
-    return this.get(
+  async getArticlesBasedOnSearch(question: string): Promise<ArticleModel[]> {
+    const response = await this.get<NewsAPIResponse>(
       `?apiKey=${apiKey}&country=us&q=${encodeURIComponent(question)}`,
     );
+    return response.articles;
   }
 }
