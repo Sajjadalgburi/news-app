@@ -1,5 +1,7 @@
 import { categoryTypes } from "../types";
 import { Resolvers } from "../types/types"; // ! Note: if you dont see this, run `npm run gen` in ./server directory
+import { createJwtToken } from "../utils/jwt";
+import "dotenv/config";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -23,7 +25,7 @@ export const resolvers: Resolvers = {
       }: {
         category: categoryTypes;
       },
-      { dataSources }
+      { dataSources },
     ) => {
       const articles = await dataSources.articlesAPI.getCategory(category);
 
@@ -53,7 +55,7 @@ export const resolvers: Resolvers = {
 
     getArticlesBasedOnSearch: async (_, { question }, { dataSources }) => {
       const articles = await dataSources.articlesAPI.getArticlesBasedOnSearch(
-        question
+        question,
       );
 
       if (!articles) {
@@ -64,6 +66,56 @@ export const resolvers: Resolvers = {
         ...article,
         image: article.urlToImage,
       }));
+    },
+
+    // Todo: Implement the me query later with mongodb
+    // me: async (_, __, {}) => {
+    //   return {
+    //     id: "1",
+    //     email: "  ",
+    //     username: "  ",
+    //   };
+    // },
+  },
+
+  Mutation: {
+    register: async (
+      _,
+      { email, password, name },
+      { user, expressObjects: { res } },
+    ) => {
+      try {
+        // todo : first thing is to save the user into mongodb
+
+        const successOperation = false;
+
+        // if the operation was not successful, return false
+        if (!successOperation) {
+          return {
+            success: false,
+          };
+        }
+
+        // we need to then create a JWT token for the user
+        const token = createJwtToken({ ...user });
+
+        // lastly, we need to store the JWT token in the cookes
+        res.cookie("accessToken", token, {
+          httpOnly: true,
+          secure: process.env.MODE === "production" ? true : false,
+          sameSite: "strict",
+          maxAge: 60 * 60 * 60 * 1000,
+        });
+
+        return {
+          ...user,
+          success: true,
+        };
+      } catch (error) {
+        return {
+          success: false,
+        };
+      }
     },
   },
 };
