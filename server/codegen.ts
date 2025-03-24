@@ -17,10 +17,10 @@ const config: CodegenConfig = {
       config: {
         contextType: "../context/index#DataSourceContext",
         mappers: {
-          Article: "./types/models.d.ts#ArticleModel",
-          User: "./types/models.d.ts#UserModel",
-          Comment: "./types/models.d.ts#CommentModel",
-          Source: "./types/models.d.ts#SourceModel",
+          Article: "./models#ArticleModel",
+          User: "./models#UserModel",
+          Comment: "./models#CommentModel",
+          Source: "./models#SourceModel",
         },
       },
     },
