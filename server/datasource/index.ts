@@ -1,6 +1,6 @@
 import { RESTDataSource } from "@apollo/datasource-rest";
 import "dotenv/config";
-import { categoryTypes } from "../graphql/reslovers";
+import { categoryTypes } from "../types";
 const apiKey = process.env.NEWS_API_KEY;
 
 /**
@@ -20,6 +20,7 @@ export class ArticlesAPI extends RESTDataSource {
   /**
    * This will essentiall make a call to the news api and make a fetch based on the title of the clicked article
    * @param title
+   * @returns single array[0]. This is the value closest to the search
    */
   getSingleArticle(title: string) {
     return this.get(`&q=${encodeURIComponent(title)}`);
@@ -29,12 +30,20 @@ export class ArticlesAPI extends RESTDataSource {
    * Pass in a specific category and this will return a proper url where we can get the results
    * We can make a method for every category but there is no point. FOLLOW DRY (dont repeat yourself)
    * @param category
+   * @returns An array of articles in the given catagory
    */
   getCategory(category: categoryTypes) {
     return this.get(`?apiKey=${apiKey}&country=us&category=${category}`);
   }
 
-  getArticlesBasedOnSearch(q: string) {
-    return this.get(`?apiKey=${apiKey}&country=us&q=${encodeURIComponent(q)}`);
+  /**
+   * This get method will fetch artciles based on a given question query
+   * @param question
+   * @returns
+   */
+  getArticlesBasedOnSearch(question: string) {
+    return this.get(
+      `?apiKey=${apiKey}&country=us&q=${encodeURIComponent(question)}`,
+    );
   }
 }
