@@ -15,9 +15,9 @@ type Query {
 
 type Mutation {
   # Mutation to log in the user - returns an Auth object which will update the cookies
-  login(email: String!, password: String!): Auth!
+  login(email: String!, password: String!): AuthResponse!
   # Mutation to sign up the user - returns an Auth object which will update the cookies
-  signUp(name: String!, email: String!, password: String!): Auth!
+  register(name: String!, email: String!, password: String!): AuthResponse!
 }
 
 type Article {
@@ -60,11 +60,13 @@ type User {
   comments: [Comment]
 }
 
-type Auth {
+type AuthResponse {
   # The user that was authenticated
-  user: User!
+  user: User
   # The token that was generated for the user
-  token: String!
+  token: String
+  # Whether the operation was successful
+  success: Boolean!
 }
 
 # Represents a user comment on an article
