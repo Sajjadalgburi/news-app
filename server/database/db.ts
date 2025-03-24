@@ -6,14 +6,21 @@
 import mongoose, { Connection } from "mongoose";
 import "dotenv/config";
 
+const mode = process.env.MODE;
+const mongoCloudUri = process.env.MONGO_URI;
+
+if (!mode || !mongoCloudUri) {
+  throw new Error(
+    "Either MODE or MONGO_URI is not defined in environment variables",
+  );
+}
+
 const uri =
-  process.env.MODE === "development"
+  mode === "development"
     ? // This is a local database server for testing purposes
       "mongodb://127.0.0.1:27017/news-app"
-    : process.env.MONGO_URI;
+    : mongoCloudUri;
 
 mongoose.connect(uri);
-
 const connection = mongoose.connection;
-
 export default connection as Connection;
