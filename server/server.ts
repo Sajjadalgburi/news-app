@@ -9,6 +9,7 @@ import path from "path";
 import connection from "./database/db";
 import "dotenv/config";
 import { ArticlesAPI } from "./api/datasource";
+import { validateJwtToken } from "./utils/jwt";
 
 const PORT = process.env.PORT || 5000;
 
@@ -39,19 +40,27 @@ const startServer = async () => {
      * expressMiddleware accepts the same arguments:
      * an Apollo Server instance and optional configuration options
      */
-    expressMiddleware(server, {
-      context: async ({ req }) => {
-        const { cache } = server;
 
-        // todo : will remove later
-        const fakeUser = {
-          id: "1",
-          email: "",
-          name: "",
-        };
+    expressMiddleware(server, {
+      context: async ({ req, res }) => {
+        const { cache } = server;
+        const token = req.cookies?.token;
+
+        // If no token, return a null user
+        if (!token) {
+          return {
+            expressObjects: { req, res },
+            user: null,
+            dataSources: { articlesAPI: new ArticlesAPI({ cache }) },
+          };
+        }
+
+        // Verify the token and return the user object or null if invalid
+        const user = validateJwtToken(token);
 
         return {
-          user: { ...fakeUser },
+          expressObjects: { req, res },
+          user: user || null, // Ensure user is null if token validation fails
           dataSources: { articlesAPI: new ArticlesAPI({ cache }) },
         };
       },
