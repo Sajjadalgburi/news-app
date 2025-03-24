@@ -39,18 +39,31 @@ export const resolvers: Resolvers = {
     },
 
     getSingleArticle: async (_, { title }, { dataSources }) => {
-
       const article = await dataSources.articlesAPI.getSingleArticle(title);
 
       if (!article) {
         return null; // Return null instead of an empty array
       }
 
-
       return {
         ...article,
         image: article.urlToImage,
       };
+    },
+
+    getArticlesBasedOnSearch: async (_, { question }, { dataSources }) => {
+      const articles = await dataSources.articlesAPI.getArticlesBasedOnSearch(
+        question
+      );
+
+      if (!articles) {
+        return [];
+      }
+
+      return articles.map((article) => ({
+        ...article,
+        image: article.urlToImage,
+      }));
     },
   },
 };
