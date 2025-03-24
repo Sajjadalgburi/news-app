@@ -4,7 +4,11 @@ type Query {
   # This query is for showcasing the hottest trends on the homepage
   displayTrendingArticles: [Article]! # must be an array of non-null
   # Query to get a category by a given string
-  getCategory(category: String!): [Article]!
+  getCategory(category: String!): [Article!]!
+  # Query which fetches a single article with the provided title
+  getSingleArticle(title: String!): Article
+  # Query to fetch an array of related articles based on the based in question query
+  getArticlesBasedOnSearch(question: String!): [Article]!
 }
 
 type Article {
