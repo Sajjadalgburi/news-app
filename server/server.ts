@@ -8,7 +8,7 @@ import fs from "fs";
 import path from "path";
 import connection from "./database/db";
 import "dotenv/config";
-import { ArticlesAPI } from "./datasource/index";
+import { ArticlesAPI } from "./api/datasource";
 
 const PORT = process.env.PORT || 5000;
 
@@ -49,8 +49,10 @@ const startServer = async () => {
 
   connection.once("open", () => {
     app.listen(PORT, () => {
-      console.log(`API server running on port ${PORT}!`);
-      console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
+      console.log(`
+    🚀  Server is running!
+    📭  Query at http://localhost:${PORT}/graphql
+  `);
     });
   });
 };
