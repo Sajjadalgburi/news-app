@@ -9,6 +9,8 @@ type Query {
   getSingleArticle(title: String!): Article
   # Query to fetch an array of related articles based on the based in question query
   getArticlesBasedOnSearch(question: String!): [Article]!
+  # This will return the currently signed in user
+  me: User!
 }
 
 type Article {
