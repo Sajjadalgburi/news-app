@@ -1,13 +1,7 @@
-export type categoryTypes =
-  | "business"
-  | "entertainment"
-  | "general"
-  | "health"
-  | "science"
-  | "sports"
-  | "technology";
+import { categoryTypes } from "../types";
+import { Resolvers } from "../types/types";
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
     displayTrendingArticles: async (_, __, { dataSources }) => {
       const { articles } = await dataSources.articlesAPI.getHomePageArticles();
