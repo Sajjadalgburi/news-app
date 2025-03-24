@@ -23,7 +23,7 @@ export const resolvers: Resolvers = {
       }: {
         category: categoryTypes;
       },
-      { dataSources },
+      { dataSources }
     ) => {
       const articles = await dataSources.articlesAPI.getCategory(category);
 
@@ -36,6 +36,21 @@ export const resolvers: Resolvers = {
         ...article,
         image: article.urlToImage,
       }));
+    },
+
+    getSingleArticle: async (_, { title }, { dataSources }) => {
+
+      const article = await dataSources.articlesAPI.getSingleArticle(title);
+
+      if (!article) {
+        return null; // Return null instead of an empty array
+      }
+
+
+      return {
+        ...article,
+        image: article.urlToImage,
+      };
     },
   },
 };
