@@ -1,16 +1,14 @@
 import { categoryTypes } from "../types";
-import { Resolvers } from "../types/types";
+import { Resolvers } from "../types/types"; // ! Note: if you dont see this, run `npm run gen` in ./server directory
 
 export const resolvers: Resolvers = {
   Query: {
     displayTrendingArticles: async (_, __, { dataSources }) => {
-      const { articles } = await dataSources.articlesAPI.getHomePageArticles();
+      const articles = await dataSources.articlesAPI.getHomePageArticles();
       // if the articles array is empty, then return empty array
       if (!articles.length || articles.length === 0) {
         return [];
       }
-
-      console.log(articles[0]);
 
       return articles.map((article) => ({
         ...article,
@@ -27,8 +25,7 @@ export const resolvers: Resolvers = {
       },
       { dataSources },
     ) => {
-      console.log("API HIT");
-      const { articles } = await dataSources.articlesAPI.getCategory(category);
+      const articles = await dataSources.articlesAPI.getCategory(category);
 
       // if the articles array is empty, then return empty array
       if (!articles.length || articles.length === 0) {
