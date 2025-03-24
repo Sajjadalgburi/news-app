@@ -24,10 +24,16 @@ export class ArticlesAPI extends RESTDataSource {
    * @param title
    * @returns single array[0]. This is the value closest to the search
    */
-  async getSingleArticle(title: string): Promise<ArticleModel> {
+  async getSingleArticle(title: string): Promise<ArticleModel | null> {
+
     const response = await this.get<NewsAPIResponse>(
-      `&q=${encodeURIComponent(title)}`,
+      `?apiKey=${apiKey}&country=us&q=${title}`
     );
+
+    if (response.status !== "ok" || !response.articles.length) {
+      return null; // Ensures we don't return undefined
+    }
+
     return response.articles[0]; // Return the first article
   }
 
@@ -39,7 +45,7 @@ export class ArticlesAPI extends RESTDataSource {
    */
   async getCategory(category: categoryTypes): Promise<ArticleModel[]> {
     const response = await this.get<NewsAPIResponse>(
-      `?apiKey=${apiKey}&country=us&category=${category}`,
+      `?apiKey=${apiKey}&country=us&category=${category}`
     );
     return response.articles;
   }
@@ -51,7 +57,7 @@ export class ArticlesAPI extends RESTDataSource {
    */
   async getArticlesBasedOnSearch(question: string): Promise<ArticleModel[]> {
     const response = await this.get<NewsAPIResponse>(
-      `?apiKey=${apiKey}&country=us&q=${encodeURIComponent(question)}`,
+      `?apiKey=${apiKey}&country=us&q=${encodeURIComponent(question)}`
     );
     return response.articles;
   }
