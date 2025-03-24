@@ -3,6 +3,8 @@
 type Query {
   # This query is for showcasing the hottest trends on the homepage
   displayTrendingArticles: [Article]! # must be an array of non-null
+  # Query to get a category by a given string
+  getCategory(category: String!): [Article]!
 }
 
 type Article {
