@@ -10,7 +10,7 @@ import type { CodegenConfig } from "@graphql-codegen/cli";
  *
  */
 const config: CodegenConfig = {
-  schema: "./graphql/schema.graphql",
+  schema: "./src/graphql/schema.graphql",
   generates: {
     "./types/types.ts": {
       plugins: ["typescript", "typescript-resolvers"],

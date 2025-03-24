@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "tsc",
     "dev": "ts-node-dev --respawn server.ts",
-    "gen": "graphql-codegen"
+    "gen": "graphql-codegen",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -31,9 +32,12 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.17",
+    "@types/jest": "29.5",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/mongoose": "^5.11.96",
     "@types/node": "^22.13.11",
+    "jest": "29.5",
+    "supertest": "^7.1.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.2"

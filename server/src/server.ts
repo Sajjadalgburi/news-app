@@ -44,7 +44,7 @@ const startServer = async () => {
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         const { cache } = server;
-        const token = req.cookies?.token;
+        const token = req.cookies?.accessToken;
 
         // If no token, return a null user
         if (!token) {

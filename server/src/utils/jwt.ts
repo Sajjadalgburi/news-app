@@ -1,7 +1,8 @@
 import { UserModel } from "../types/models";
 import "dotenv/config";
-const JWTSecret = process.env.JWT_SECRET;
 import jwt from "jsonwebtoken";
+
+const JWTSecret = process.env.JWT_SECRET;
 
 // defense mechanism to ensure that JWT_SECRET is defined in the environment variables
 if (!JWTSecret) {
@@ -13,12 +14,12 @@ if (!JWTSecret) {
  * @param user
  * @returns Token - string
  */
-export const createJwtToken = ({ id, email, name }: UserModel): string => {
+export const createJwtToken = (user: UserModel): string => {
   // todo : test this function
   const payload = {
-    id: id.toString(),
-    email: email,
-    name: name,
+    id: user.id,
+    email: user.email,
+    name: user.name,
   };
 
   const token = jwt.sign(payload, JWTSecret, {
@@ -29,7 +30,7 @@ export const createJwtToken = ({ id, email, name }: UserModel): string => {
 };
 
 /**
- * This function will be used to get the user from the token if the token is valid
+ * This function will be used to get the user object from the token if the token is valid
  * @param token
  * @returns User object or null if token is invalid
  */

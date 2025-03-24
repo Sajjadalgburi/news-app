@@ -4,7 +4,7 @@ import { comparePassword, hashPassword } from "../helpers/bcrypt";
 
 // ! This was from ChatGPT not me lol
 interface UserDocument extends Omit<UserModel, "id">, Document {
-  id: string; // Override Mongoose Document ID type
+  id: string; // Override Mongoose Document ID type since they are clashing with one another
   password: string;
   checkUserPassword(password: string): Promise<boolean>;
 }
