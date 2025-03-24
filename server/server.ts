@@ -6,7 +6,6 @@ import cors from "cors";
 import { resolvers } from "./graphql/reslovers";
 import fs from "fs";
 import path from "path";
-import { MyContext } from "./interfaces";
 import connection from "./database/db";
 import "dotenv/config";
 import { ArticlesAPI } from "./datasource/index";
@@ -18,7 +17,7 @@ const app = express();
 
 // Same ApolloServer initialization as before, plus the drain plugin
 // for our httpServer.
-const server = new ApolloServer<MyContext>({
+const server = new ApolloServer({
   typeDefs: fs.readFileSync(
     path.join(__dirname, "./graphql/schema.graphql"),
     "utf-8",
