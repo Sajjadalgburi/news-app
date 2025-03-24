@@ -16,6 +16,8 @@ type Query {
 type Mutation {
   # Mutation to log in the user - returns an Auth object which will update the cookies
   login(email: String!, password: String!): Auth!
+  # Mutation to sign up the user - returns an Auth object which will update the cookies
+  signUp(name: String!, email: String!, password: String!): Auth!
 }
 
 type Article {
