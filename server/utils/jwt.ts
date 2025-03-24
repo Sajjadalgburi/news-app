@@ -31,12 +31,25 @@ export const createJwtToken = ({ id, email, name }: UserModel): string => {
 /**
  * This function will be used to get the user from the token if the token is valid
  * @param token
+ * @returns User object or null if token is invalid
  */
-export const validateJwtToken = (token: string) => {
+export const validateJwtToken = (
+  token: string,
+): {
+  id: string;
+  email: string;
+  name: string;
+} | null => {
   try {
-    return jwt.verify(token, JWTSecret);
+    const decoded = jwt.verify(token, JWTSecret) as UserModel;
+    return {
+      id: decoded.id,
+      email: decoded.email,
+      name: decoded.name,
+    };
   } catch (error) {
-    if (error.name === "TokenExpiredError") return null; // Token expired
+    if (error instanceof Error && error.name === "TokenExpiredError")
+      return null;
     return null;
   }
 };
