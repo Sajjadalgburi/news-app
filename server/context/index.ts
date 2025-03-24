@@ -5,6 +5,11 @@ import { ArticlesAPI } from "../api/datasource";
  * This ensures type safety when accessing data sources within GraphQL resolvers.
  */
 export type DataSourceContext = {
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  };
   dataSources: {
     articlesAPI: ArticlesAPI;
   };
