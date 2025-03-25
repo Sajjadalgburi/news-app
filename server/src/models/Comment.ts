@@ -7,13 +7,13 @@ interface CommentDocument extends Omit<CommentModel, "id">, Document {
 }
 
 const commentSchema: Schema<CommentDocument> = new Schema({
-  articleUrl: {
-    type: String,
-    required: [true, "The article URL must be provided"],
-  }, // the article URL this comment is associated with
+  articleId: {
+    type: Schema.Types.ObjectId,
+    required: [true, "The articleId must be provided"],
+  },
   content: { type: String, required: [true, "Content is a required field"] },
   userId: {
-    type: String,
+    type: Schema.Types.ObjectId,
     required: [true, "Please provide the userId who created this comment"],
   }, // the user who made this comment
   upvote: { type: Number, default: 0 },
