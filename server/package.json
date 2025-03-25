@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "compile": "tsc",
-    "dev": "ts-node-dev --respawn server.ts",
+    "dev": "ts-node-dev --respawn ./src/server.ts",
+    "p": "ts-node-dev --respawn ./src/playground.ts",
     "gen": "graphql-codegen",
     "test": "jest",
     "test:watch": "jest --watch",
