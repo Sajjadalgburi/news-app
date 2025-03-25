@@ -14,15 +14,18 @@ const userSchema: Schema<UserDocument> = new Schema({
   name: {
     type: String,
     required: [true, "Name is required"],
-    minlength: [3, "Name must be a minimum length of 3 characters"],
-    maxlength: [50, "Name must be a maximum length of 50 characters"],
+    minlength: [4, "Name must be a minimum length of 4 characters"],
+    maxlength: [15, "Name must be a maximum length of 15 characters"],
+    trim: true,
   },
   email: {
     type: String,
     required: [true, "Email is required"],
     unique: [true, "This email is already in use"],
     match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
+    trim: true,
   },
+
   profilePicture: { type: String },
   password: {
     type: String,
