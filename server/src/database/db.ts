@@ -6,7 +6,7 @@
 import mongoose, { Connection } from "mongoose";
 import "dotenv/config";
 
-const mode = process.env.MODE;
+const mode = process.env.NODE_ENV;
 const mongoCloudUri = process.env.MONGO_URI;
 
 if (!mode || !mongoCloudUri) {
