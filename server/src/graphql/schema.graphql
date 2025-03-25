@@ -28,7 +28,7 @@ input SaveArticleInput {
   # The date and time that the article was published, in UTC (+000).
   publishedAt: String!
   # The source from which this article originated.
-  source: Source!
+  source: SourceInput!
   # The direct URL to the article. Used to associate comments.
   url: String!
   # A description or snippet from the article.
@@ -64,6 +64,13 @@ type Article {
 
 # Represents the source of the article.
 type Source {
+  # The display name of the source.
+  name: String!
+  # The identifier of the source. Can be null.
+  id: String
+}
+
+input SourceInput {
   # The display name of the source.
   name: String!
   # The identifier of the source. Can be null.
