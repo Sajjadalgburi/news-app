@@ -10,6 +10,7 @@ import connection from "./database/db";
 import "dotenv/config";
 import { ArticlesAPI } from "./api/datasource";
 import { validateJwtToken } from "./utils/jwt";
+import { cleanToken } from "./utils";
 
 const PORT = process.env.PORT || 5000;
 
@@ -44,10 +45,12 @@ const startServer = async () => {
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         const { cache } = server;
-        const token = req.cookies?.accessToken;
+        const cookiesToken = req.cookies?.accessToken;
+        let authToken: string | null =
+          req.body.token || req.query.token || req.headers.authorization;
 
-        // If no token, return a null user
-        if (!token) {
+        // If no cookiesToken, return a null user
+        if (!cookiesToken && !authToken) {
           return {
             expressObjects: { req, res },
             user: null,
@@ -55,8 +58,13 @@ const startServer = async () => {
           };
         }
 
+        const cleanedToken = cleanToken(authToken);
+
         // Verify the token and return the user object or null if invalid
-        const user = validateJwtToken(token);
+        const userFromCookie = validateJwtToken(cookiesToken);
+        const userFromAuth = validateJwtToken(cleanedToken);
+
+        const user = userFromAuth || userFromCookie;
 
         return {
           expressObjects: { req, res },
