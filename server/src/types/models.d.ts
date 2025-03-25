@@ -1,7 +1,7 @@
 export type ArticleModel = {
   title: string;
   publishedAt: string;
-  source: string;
+  source: SourceModel;
   url: string;
   urlToImage: string;
   description?: string;
