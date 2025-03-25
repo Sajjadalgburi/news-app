@@ -4,35 +4,33 @@ import { comparePassword, hashPassword } from "../helpers/bcrypt";
 
 // ! This was from ChatGPT not me lol
 interface UserDocument extends Omit<UserModel, "id">, Document {
-  _id: string; // Ensures _id is treated as a string in TypeScript
   password: string;
   createdAt: Date;
   updatedAt: Date;
   profilePicture?: string;
   checkUserPassword(password: string): Promise<boolean>;
 }
-
 const userSchema: Schema<UserDocument> = new Schema({
   name: {
     type: String,
     required: [true, "Name is required"],
-    minlength: [3, "Name must be a minimum length of 3"],
-    maxlength: [50, "Name must be a maximum length of 50"],
+    minlength: [3, "Name must be a minimum length of 3 characters"],
+    maxlength: [50, "Name must be a maximum length of 50 characters"],
   },
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique: [true, "Email is already in use"],
-    match: /^\S+@\S+\.\S+$/, // Regex for email validation
+    unique: [true, "This email is already in use"],
+    match: [/^\S+@\S+\.\S+$/, "Please provide a valid email address"],
   },
   profilePicture: { type: String },
   password: {
     type: String,
-    required: true,
-    minlength: [6, "password must be 6 letters long"],
-    maxlength: [20, "password must be 20 letters long"],
+    required: [true, "Password is required"],
+    minlength: [6, "Password must be at least 6 characters long"],
+    maxlength: [20, "Password must be at most 20 characters long"],
   },
-  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }], // Users can make multiple comments
+  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
