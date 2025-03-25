@@ -20,6 +20,8 @@ type Mutation {
   register(name: String!, email: String!, password: String!): AuthResponse!
   # When a user clicks on an article, this mutation will be called to save the article in the database
   saveArticle(input: SaveArticleInput!): AuthResponse!
+  # create a comment on an article
+  createComment(input: CreateCommentInput!): AuthResponse!
 }
 
 input SaveArticleInput {
@@ -39,6 +41,31 @@ input SaveArticleInput {
   image: String
   # The author of the article. Can be null.
   author: String
+}
+
+input UserInput {
+  # We only need the users ID to associate the comment with the user
+  id: ID!
+}
+
+input CreateCommentInput {
+  # ID of the article the comment is associated with
+  articleId: ID!
+  # The text content of the comment
+  content: String!
+  # The user who wrote the comment
+  user: UserInput!
+  # Number of upvotes the comment has received
+  upvote: Int
+  # Number of downvotes the comment has received
+  downvote: Int
+}
+
+input SourceInput {
+  # The display name of the source.
+  name: String!
+  # The identifier of the source. Can be null.
+  id: String
 }
 
 type Article {
@@ -64,13 +91,6 @@ type Article {
 
 # Represents the source of the article.
 type Source {
-  # The display name of the source.
-  name: String!
-  # The identifier of the source. Can be null.
-  id: String
-}
-
-input SourceInput {
   # The display name of the source.
   name: String!
   # The identifier of the source. Can be null.
@@ -105,8 +125,8 @@ type AuthResponse {
 type Comment {
   # Unique identifier for the comment
   id: ID!
-  # The URL of the article this comment belongs to (instead of an article ID)
-  articleUrl: String!
+  # ID of the article the comment is associated with
+  articleId: ID!
   # The text content of the comment
   content: String!
   # The user who wrote the comment
