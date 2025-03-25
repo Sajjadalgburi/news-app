@@ -3,6 +3,7 @@ import { Resolvers } from "../types/types"; // ! Note: if you dont see this, run
 import { createJwtToken } from "../utils/jwt";
 import "dotenv/config";
 import { User } from "../models";
+import { handleValidationErrors } from "../utils";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -86,8 +87,7 @@ export const resolvers: Resolvers = {
       { expressObjects: { res } },
     ) => {
       try {
-        // todo: Before even creating a new user, check if the email is already in use
-
+        // Before even creating a new user, check if the email is already in use
         const userExists = await User.findOne({
           email,
         });
@@ -96,6 +96,7 @@ export const resolvers: Resolvers = {
           return {
             success: false,
             message: `User with ${email} already exists`,
+            status: 400,
           };
         }
 
@@ -109,13 +110,14 @@ export const resolvers: Resolvers = {
         if (!newUser) {
           return {
             success: false,
-            message: "User creation failed due to unknown error",
+            message: "Could not create user",
+            status: 500,
           };
         }
 
         // Create a JWT token for the new user
         const token = createJwtToken({
-          id: newUser._id,
+          id: newUser.id,
           email: newUser.email,
           name: newUser.name,
         });
@@ -129,15 +131,34 @@ export const resolvers: Resolvers = {
         });
 
         return {
-          id: newUser._id,
-          email: newUser.email,
-          name: newUser.name,
+          user: {
+            id: newUser.id,
+            email: newUser.email,
+            name: newUser.name,
+          },
+          token: token as string,
           success: true,
           message: "User created successfully!",
+          status: 200,
         };
       } catch (error) {
-        console.error("Registration Error:", error);
-        return { success: false };
+        if (error.name === "ValidationError") {
+          const messages = handleValidationErrors(error);
+
+          return {
+            success: false,
+            message: messages,
+            status: 400,
+          };
+        }
+
+        return {
+          success: false,
+          message: Array.isArray(error)
+            ? "Could not create user"
+            : (error.toString() as string),
+          status: 500,
+        };
       }
     },
   },
