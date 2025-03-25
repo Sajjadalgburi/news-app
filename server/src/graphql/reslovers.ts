@@ -2,7 +2,7 @@ import { categoryTypes } from "../types";
 import { Resolvers } from "../types/types"; // ! Note: if you dont see this, run `npm run gen` in ./server directory
 import { createJwtToken } from "../utils/jwt";
 import "dotenv/config";
-import { User } from "../models";
+import { Article, User } from "../models";
 import { handleValidationErrors } from "../utils";
 
 export const resolvers: Resolvers = {
@@ -157,6 +157,51 @@ export const resolvers: Resolvers = {
           message: Array.isArray(error)
             ? "Could not create user"
             : (error.toString() as string),
+          status: 500,
+        };
+      }
+    },
+    saveArticle: async (_, { input }) => {
+      try {
+        // first, we need to double check our database, if the article already exists, then we must send back a response
+        const foundArticle = await Article.findOne({
+          where: {
+            title: input.title,
+          },
+        });
+
+        if (foundArticle) {
+          return {
+            success: false,
+            message: "Article already exists",
+            status: 400,
+          };
+        }
+
+        // ----- else, we now save the article -----
+
+        const articleData = {
+          ...input,
+          // If source is an object, ensure it's properly saved (example for ORM models)
+          source: {
+            name: input.source.name,
+            id: input.source.id,
+          },
+        };
+
+        // Save the new article
+        const newArticle = new Article(articleData);
+        await newArticle.save(); // Ensure saving is awaited
+
+        return {
+          success: true,
+          message: "Article saved successfully",
+          status: 200,
+        };
+      } catch {
+        return {
+          success: false,
+          message: "Could not save article",
           status: 500,
         };
       }
