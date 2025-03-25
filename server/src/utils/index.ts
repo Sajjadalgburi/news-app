@@ -7,3 +7,7 @@ export const handleValidationErrors = (error: any): string => {
 
   return messages.join(", "); // Join multiple messages into a single string
 };
+
+export const cleanToken = (token: string): string => {
+  return token.split(" ").pop().trim();
+};
