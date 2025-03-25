@@ -165,9 +165,7 @@ export const resolvers: Resolvers = {
       try {
         // first, we need to double check our database, if the article already exists, then we must send back a response
         const foundArticle = await Article.findOne({
-          where: {
-            title: input.title,
-          },
+          title: input.title,
         });
 
         if (foundArticle) {
@@ -198,10 +196,22 @@ export const resolvers: Resolvers = {
           message: "Article saved successfully",
           status: 200,
         };
-      } catch {
+      } catch (error) {
+        if (error.name === "ValidationError") {
+          const messages = handleValidationErrors(error);
+
+          return {
+            success: false,
+            message: messages,
+            status: 400,
+          };
+        }
+
         return {
           success: false,
-          message: "Could not save article",
+          message: Array.isArray(error)
+            ? "Could not create user"
+            : (error.toString() as string),
           status: 500,
         };
       }
