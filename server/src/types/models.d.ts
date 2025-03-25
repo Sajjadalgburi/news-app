@@ -1,3 +1,5 @@
+import { Schema } from "mongoose";
+
 export type ArticleModel = {
   title: string;
   publishedAt: string;
@@ -24,10 +26,10 @@ export type UserModel = {
 };
 
 export type CommentModel = {
-  id: string;
-  articleUrl: string;
+  id: string; // current Id of the comment
+  articleId: Schema.Types.ObjectId; // the Id of the article
   content: string;
-  userId: string;
+  userId: string | Schema.Types.ObjectId;
   upvote?: number;
   downvote?: number;
 };
