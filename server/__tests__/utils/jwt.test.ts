@@ -2,6 +2,8 @@ import { createJwtToken } from "../../src/utils/jwt";
 
 jest.mock("../../src/utils/jwt");
 
+afterAll(jest.resetAllMocks);
+
 describe("JWT helper methods in utils folder", () => {
   describe("The create JWT method helper", () => {
     const createJwtToken_MOCKED_ = createJwtToken as jest.Mock;
@@ -22,13 +24,16 @@ describe("JWT helper methods in utils folder", () => {
       expect(token).toBe(mockToken);
       expect(createJwtToken).toHaveBeenCalledWith(userPayload);
       expect(createJwtToken).toHaveBeenCalledTimes(1);
+      expect(createJwtToken).not.toThrow(/Could not create the JWT token/i);
     });
 
-    it.skip("Should throw an Error if it catches an issue/error", () => {
-      const invalidPayload = null; // passing invalid payload to simulate an error event
-      createJwtToken_MOCKED_.mockImplementation(invalidPayload);
+    it("Should throw an Error if it catches an issue/error", () => {
+      createJwtToken_MOCKED_.mockImplementation(() => {
+        throw new Error("Could not create the JWT token");
+      });
 
-      // Testing the actual function with an invalid payload
+      const invalidPayload = null; // passing invalid payload to simulate an error event
+
       expect(() => createJwtToken(invalidPayload)).toThrow(
         /Could not create the JWT token/i,
       );
