@@ -18,6 +18,27 @@ type Mutation {
   login(email: String!, password: String!): AuthResponse!
   # Mutation to sign up the user - returns an Auth object which will update the cookies
   register(name: String!, email: String!, password: String!): AuthResponse!
+  # When a user clicks on an article, this mutation will be called to save the article in the database
+  saveArticle(input: SaveArticleInput!): AuthResponse!
+}
+
+input SaveArticleInput {
+  # The headline or title of the article.
+  title: String!
+  # The date and time that the article was published, in UTC (+000).
+  publishedAt: String!
+  # The source from which this article originated.
+  source: Source!
+  # The direct URL to the article. Used to associate comments.
+  url: String!
+  # A description or snippet from the article.
+  description: String
+  # The unformatted content of the article (where available). This is truncated to 200 characters.
+  content: String
+  # The URL to a relevant image for the article.
+  image: String
+  # The author of the article. Can be null.
+  author: String
 }
 
 type Article {
