@@ -161,6 +161,73 @@ export const resolvers: Resolvers = {
         };
       }
     },
+    login: async (_, { email, password }, { expressObjects: { res } }) => {
+      try {
+        // Before even creating a new user, check if the email exists
+        const userExists = await User.findOne({
+          email,
+        });
+
+        if (!userExists) {
+          return {
+            success: false,
+            message: `user with ${email} does not exist`,
+            status: 400,
+          };
+        }
+
+        // Check if the password is correct
+        const isPasswordValid = await userExists.checkUserPassword(password);
+
+        if (!isPasswordValid) {
+          return {
+            success: false,
+            message: "Incorrect password",
+            status: 400,
+          };
+        }
+
+        // Create a JWT token for the new user
+        const token = createJwtToken({
+          id: userExists.id,
+          email: userExists.email,
+          name: userExists.name,
+        });
+
+        // Store the JWT token in cookies
+        res.cookie("accessToken", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: 60 * 60 * 60 * 1000,
+        });
+
+        return {
+          token: token as string,
+          success: true,
+          message: "You will be logged in shortly!",
+          status: 200,
+        };
+      } catch (error) {
+        if (error.name === "ValidationError") {
+          const messages = handleValidationErrors(error);
+
+          return {
+            success: false,
+            message: messages,
+            status: 400,
+          };
+        }
+
+        return {
+          success: false,
+          message: Array.isArray(error)
+            ? "Could not create user"
+            : (error.toString() as string),
+          status: 500,
+        };
+      }
+    },
     saveArticle: async (_, { input }) => {
       try {
         // first, we need to double check our database, if the article already exists, then we must send back a response
