@@ -17,7 +17,23 @@ describe("bcrypt helper functions", () => {
       expect(typeof token).toBe("string");
       expect(token).toBe("mocked_hashed_password");
 
-      mockHashPassword.mockRestore(); // Don't forget to restore the spy
+      mockHashPassword.mockRestore();
+    });
+
+    it("Should return a null promise if there is an error", async () => {
+      // Mocking the resolved value to return null
+      const mockHashPassword = jest
+        .spyOn(require("../../src/helpers/bcrypt"), "hashPassword")
+        .mockResolvedValueOnce(null);
+
+      const fakePassword = undefined;
+      const token = await hashPassword(fakePassword); // Uses mocked version
+
+      // Checking if the token is null
+      expect(token).toBeNull();
+      expect(mockHashPassword).toHaveBeenCalledWith(fakePassword);
+
+      mockHashPassword.mockRestore();
     });
   });
 });
