@@ -2,7 +2,7 @@ import { categoryTypes } from "../types";
 import { Resolvers } from "../types/types"; // ! Note: if you dont see this, run `npm run gen` in ./server directory
 import { createJwtToken } from "../utils/jwt";
 import "dotenv/config";
-import { Article, User } from "../models";
+import { Article, User, Comment } from "../models";
 import { handleValidationErrors } from "../utils";
 
 export const resolvers: Resolvers = {
@@ -210,8 +210,79 @@ export const resolvers: Resolvers = {
         return {
           success: false,
           message: Array.isArray(error)
-            ? "Could not create user"
+            ? "Could not create article"
             : (error.toString() as string),
+          status: 500,
+        };
+      }
+    },
+
+    createComment: async (_, { input }, { user }) => {
+      try {
+        // Check if user is logged in. If not, return an error because they are not authorized to create a comment
+        if (!user) {
+          return {
+            success: false,
+            message: "You must be logged in to create a comment",
+            status: 401,
+          };
+        }
+
+        // Validate that article exists
+        const article = await Article.findById(input.articleId);
+        if (!article) {
+          return {
+            success: false,
+            message: "Article not found",
+            status: 404,
+          };
+        }
+
+        // ----- Save the comment -----
+        const commentData = {
+          ...input,
+          user: {
+            name: user.name,
+            id: user.id,
+          },
+        };
+
+        // Save the new comment
+        const newComment = new Comment(commentData);
+        await newComment.save();
+
+        // Update the article with the new comment
+        article.comments = article.comments || [];
+        article.comments.push(newComment.id);
+        await article.save();
+
+        // Update the user's comments array
+        const foundUser = await User.findById(user.id);
+        if (foundUser) {
+          foundUser.comments = foundUser.comments || [];
+          foundUser.comments.push(newComment.id);
+          await foundUser.save();
+        }
+
+        // Return success response
+        return {
+          success: true,
+          message: "Comment created successfully",
+          status: 200,
+        };
+      } catch (error) {
+        if (error.name === "ValidationError") {
+          const messages = handleValidationErrors(error);
+          return {
+            success: false,
+            message: messages,
+            status: 400,
+          };
+        }
+
+        return {
+          success: false,
+          message: "Could not create comment: " + error.toString(),
           status: 500,
         };
       }
