@@ -67,6 +67,8 @@ type AuthResponse {
   token: String
   # Whether the operation was successful
   success: Boolean!
+  # A message to display to the user in the event of an error
+  message: String
 }
 
 # Represents a user comment on an article
