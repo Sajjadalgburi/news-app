@@ -283,7 +283,6 @@ export const resolvers: Resolvers = {
         };
       }
     },
-
     createComment: async (_, { input }, { user }) => {
       try {
         // Check if user is logged in. If not, return an error because they are not authorized to create a comment
@@ -305,13 +304,12 @@ export const resolvers: Resolvers = {
           };
         }
 
+        // todo : add logic so user does not comment more than 5 times for the same article
+
         // ----- Save the comment -----
         const commentData = {
           ...input,
-          user: {
-            name: user.name,
-            id: user.id,
-          },
+          userId: user.id,
         };
 
         // Save the new comment
@@ -325,11 +323,9 @@ export const resolvers: Resolvers = {
 
         // Update the user's comments array
         const foundUser = await User.findById(user.id);
-        if (foundUser) {
-          foundUser.comments = foundUser.comments || [];
-          foundUser.comments.push(newComment.id);
-          await foundUser.save();
-        }
+        foundUser.comments = foundUser.comments || [];
+        foundUser.comments.push(newComment.id);
+        await foundUser.save();
 
         // Return success response
         return {
