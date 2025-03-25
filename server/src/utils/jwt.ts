@@ -14,19 +14,22 @@ if (!JWTSecret) {
  * @param user
  * @returns Token - string
  */
-export const createJwtToken = (user: UserModel): string => {
-  // todo : test this function
-  const payload = {
-    id: user.id,
-    email: user.email,
-    name: user.name,
-  };
+export const createJwtToken = (user: UserModel): string | Error => {
+  try {
+    const payload = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    };
 
-  const token = jwt.sign(payload, JWTSecret, {
-    expiresIn: "30d",
-  });
+    const token = jwt.sign(payload, JWTSecret, {
+      expiresIn: "30d",
+    });
 
-  return token;
+    return token;
+  } catch (e) {
+    throw new Error("Could not create the JWT token");
+  }
 };
 
 /**
