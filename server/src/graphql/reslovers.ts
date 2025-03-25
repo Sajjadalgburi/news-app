@@ -2,6 +2,7 @@ import { categoryTypes } from "../types";
 import { Resolvers } from "../types/types"; // ! Note: if you dont see this, run `npm run gen` in ./server directory
 import { createJwtToken } from "../utils/jwt";
 import "dotenv/config";
+import { User } from "../models";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -82,39 +83,61 @@ export const resolvers: Resolvers = {
     register: async (
       _,
       { email, password, name },
-      { user, expressObjects: { res } },
+      { expressObjects: { res } },
     ) => {
       try {
-        // todo : first thing is to save the user into mongodb
+        // todo: Before even creating a new user, check if the email is already in use
 
-        const successOperation = false;
+        const userExists = await User.findOne({
+          email,
+        });
 
-        // if the operation was not successful, return false
-        if (!successOperation) {
+        if (userExists) {
           return {
             success: false,
+            message: `User with ${email} already exists`,
           };
         }
 
-        // we need to then create a JWT token for the user
-        const token = createJwtToken({ ...user });
+        // Save the new user into MongoDB
+        const newUser = await User.create({
+          email,
+          password,
+          name,
+        });
 
-        // lastly, we need to store the JWT token in the cookes
+        if (!newUser) {
+          return {
+            success: false,
+            message: "User creation failed due to unknown error",
+          };
+        }
+
+        // Create a JWT token for the new user
+        const token = createJwtToken({
+          id: newUser._id,
+          email: newUser.email,
+          name: newUser.name,
+        });
+
+        // Store the JWT token in cookies
         res.cookie("accessToken", token, {
           httpOnly: true,
-          secure: process.env.MODE === "production" ? true : false,
+          secure: process.env.NODE_ENV === "production",
           sameSite: "strict",
           maxAge: 60 * 60 * 60 * 1000,
         });
 
         return {
-          ...user,
+          id: newUser._id,
+          email: newUser.email,
+          name: newUser.name,
           success: true,
+          message: "User created successfully!",
         };
       } catch (error) {
-        return {
-          success: false,
-        };
+        console.error("Registration Error:", error);
+        return { success: false };
       }
     },
   },
