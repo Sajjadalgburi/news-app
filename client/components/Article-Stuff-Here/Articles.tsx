@@ -1,6 +1,7 @@
 import React from "react";
 import ArticleLaytout from "./ArticleLaytout";
 import ArticleCard from "./ArticleCard";
+import ArticleLoadingState from "./ArticleLoadingState";
 
 interface Article {
   title: string;
@@ -17,7 +18,7 @@ interface Props {
 }
 
 const Articles: React.FC<Props> = ({ articles, loading, error }) => {
-  if (loading) return <h1>Loading...</h1>;
+  if (loading) return <ArticleLoadingState />;
   if (error) return <h1>Error: {error.message}</h1>;
 
   const shuffledArticles = [...articles].sort(() => Math.random() - 0.5);
