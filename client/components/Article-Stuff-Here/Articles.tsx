@@ -24,14 +24,8 @@ const Articles: React.FC<Props> = ({ articles, loading, error }) => {
 
   return (
     <ArticleLaytout>
-      <div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 grid-flow-dense"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gridTemplateRows: "masonry",
-          gap: "16px",
-        }}>
+      {/* Masonry-style column layout */}
+      <div className="max-w-7xl mx-auto md:columns-2 lg:columns-3 xl:columns-4 space-y-4 md:space-y-6 md:gap-6">
         {shuffledArticles.map((article, i) => {
           const isFeatured = Math.random() > 0.9;
           const hasImage = Math.random() > 0.5;
@@ -39,9 +33,7 @@ const Articles: React.FC<Props> = ({ articles, loading, error }) => {
           return (
             <div
               key={i}
-              className={`bg-gray-100 rounded-xl shadow-md p-4 self-center ${
-                isFeatured ? "col-span-2" : "col-span-1"
-              }`}>
+              className="break-inside-avoid bg-gray-100 rounded-xl shadow-md p-4">
               <ArticleCard
                 article={article}
                 isFeatured={isFeatured}
