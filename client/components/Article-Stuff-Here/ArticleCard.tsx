@@ -29,15 +29,15 @@ const ArticleCard: React.FC<Props> = ({
   return (
     <Link
       href={`/article/${encodeURIComponent(article.title)}`}
-      className="block overflow-hidden rounded-xl h-full shadow-md transition-transform transform hover:scale-102 hover:underline hover:shadow-lg">
+      className="block overflow-hidden rounded-xl min-h-fit mx-auto self-center shadow-md transition-transform transform hover:scale-102 hover:underline hover:shadow-lg">
       {image && article.image && (
-        <div className="relative w-full h-48">
+        <div className={`relative w-full ${isFeatured ? "h-96" : "h-48"}`}>
           <Image
             src={article.image}
             alt={article.title}
             layout="fill"
             objectFit="cover"
-            className="rounded-t-xl"
+            className={`rounded-t-xl ${isFeatured}`}
           />
         </div>
       )}
@@ -61,7 +61,8 @@ const ArticleCard: React.FC<Props> = ({
         )}
 
         <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
-          <span className="font-medium">{article.author}</span>
+          <span className="font-medium">By: {article.author}</span>
+          {/* Todo : make sure to format date using date-fs */}
           <span>{article.publishedAt}</span>
         </div>
       </div>
