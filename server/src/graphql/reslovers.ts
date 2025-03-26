@@ -304,7 +304,19 @@ export const resolvers: Resolvers = {
           };
         }
 
-        // todo : add logic so user does not comment more than 5 times for the same article
+        // Add logic so user does not comment more than 5 times for the same article
+        const userAlreadyCommented: object[] = await Comment.find({
+          userId: user.id,
+        });
+
+        if (userAlreadyCommented.length > 6) {
+          return {
+            success: false,
+            message:
+              "You have reached the maximum number of comments for this article",
+            status: 400,
+          };
+        }
 
         // ----- Save the comment -----
         const commentData = {
