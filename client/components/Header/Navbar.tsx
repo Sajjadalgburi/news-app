@@ -4,6 +4,7 @@ import React from "react";
 import { categories } from "../../helpers/constants";
 import { ThemeToggle } from "../ThemeToggle";
 import AuthGroup from "./AuthGroup";
+import CatagoryTitle from "../CatagoryTitle";
 
 const user = {
   loggedIn: false,
@@ -31,12 +32,7 @@ const Navbar = () => {
         {/* Array of Catagories */}
         <div className="flex gap-2 font-semibold md:text-md">
           {categories.map((c) => (
-            <Link
-              key={`${c.name} - ${Math.random()}}`}
-              className=" capitalize p-2 rounded-lg hover:bg-gray-200"
-              href={`/category/${c.name.toLowerCase()}`}>
-              {c.name}
-            </Link>
+            <CatagoryTitle key={c.name} name={c.name} />
           ))}
         </div>
 
