@@ -5,10 +5,10 @@ import Link from "next/link";
 const AuthGroup = () => {
   return (
     <div className="flex justify-center items-center gap-2">
-      <Button asChild>
+      <Button size={"lg"} variant={"default"} asChild>
         <Link href="/login">Login</Link>
       </Button>{" "}
-      <Button variant={"secondary"} asChild>
+      <Button size={"lg"} variant={"outline"} asChild>
         <Link href="/register">Register</Link>
       </Button>{" "}
     </div>
