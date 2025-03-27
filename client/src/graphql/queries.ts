@@ -3,8 +3,8 @@ import { gql } from "@/__generated__";
 /**
  * Fetches all articles for the homepage. These articles are trending.
  */
-export const ARTICLES_FOR_HOMEPAGE = gql(`
-  query Query {
+export const GET_ARTICLES_FOR_HOMEPAGE = gql(`
+  query DisplayTrendingArticles {
     displayTrendingArticles {
       title
       publishedAt
@@ -25,8 +25,8 @@ export const ARTICLES_FOR_HOMEPAGE = gql(`
  * Fetches all articles for a specific category.
  * @param category The category to fetch articles for.
  */
-export const ARTICLES_FOR_CATEGORY = gql(`
-  query Query($category: String!) {
+export const GET_ARTICLES_FOR_CATEGORY = gql(`
+  query GetCategory($category: String!) {
     getCategory(category: $category) {
       title
       publishedAt
@@ -47,7 +47,7 @@ export const ARTICLES_FOR_CATEGORY = gql(`
  * Will fetch the currently logged in user if they exist.
  */
 export const GET_ME = gql(`
-  query Query {
+  query GetMe {
   me {
     user {
       id
@@ -65,7 +65,7 @@ export const GET_ME = gql(`
  * This query will fetch all articles based on a search query from a search bar or something related
  */
 export const GET_ARTICLE_BASED_ON_SEARCH = gql(`
-  query Query($question: String!) {
+  query GetArticlesBasedOnSearch($question: String!) {
   getArticlesBasedOnSearch(question: $question) {
     title
     publishedAt
