@@ -15,7 +15,7 @@ const user = {
 
 const Navbar = () => {
   return (
-    <header>
+    <header className="bg-accent rounded-md max-w-[90%] mx-auto shadow-md sticky top-0 z-50">
       <nav className="flex justify-between items-center p-4 ">
         <div className="flex items-center justify-center gap-2">
           <Image
@@ -26,7 +26,11 @@ const Navbar = () => {
             alt="User Image"
           />
 
-          <Link href={"/"}>App Name</Link>
+          <Link
+            className="capitalize md:text-3xl text-lg font-semibold"
+            href={"/"}>
+            Canadian News
+          </Link>
         </div>
 
         {/* Array of Catagories */}
@@ -37,7 +41,7 @@ const Navbar = () => {
         </div>
 
         {/* Outmost right hand side */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-center items-center">
           <ThemeToggle />
           {user.loggedIn ? (
             <div>
