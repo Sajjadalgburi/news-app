@@ -4,6 +4,7 @@ import { createJwtToken } from "../utils/jwt";
 import "dotenv/config";
 import { Article, User, Comment } from "../models";
 import { handleValidationErrors } from "../utils";
+import analyzeArticle from "../api/openai";
 
 export const resolvers: Resolvers = {
   Query: {
@@ -42,6 +43,78 @@ export const resolvers: Resolvers = {
       }));
     },
 
+    getAIAnalysis: async (_, { content, articleId }) => {
+      try {
+        // First, check if the article exists in the database
+        const findArticle = await Article.findById(articleId);
+
+        if (!findArticle) {
+          return {
+            success: false,
+            message: "Article not found",
+            status: 404,
+          };
+        }
+
+        // Second, check if the article has already been analyzed
+        // If it has, return the existing analysis
+        if (findArticle.ai !== undefined) {
+          return {
+            success: true,
+            message: "Article already analyzed",
+            status: 200,
+            ai: findArticle.ai,
+          };
+        }
+
+        // Analyze the article using AI
+        const res = await analyzeArticle(content);
+
+        if (!res) {
+          return {
+            success: false,
+            message: "Could not analyze article",
+            status: 500,
+          };
+        }
+
+        // Update the article with the AI analysis
+        const updateArticle = await Article.findByIdAndUpdate(
+          articleId,
+          {
+            ai: {
+              biasRating: res.biasRating,
+              worthinessRating: res.worthinessRating,
+              summarizedContent: res.summarizedContent, // Fixed typo
+            },
+          },
+          { new: true, runValidators: true },
+        );
+
+        if (!updateArticle) {
+          return {
+            success: false,
+            message: "Failed to update article with AI analysis",
+            status: 500,
+          };
+        }
+
+        return {
+          ai: updateArticle.ai, // Return updated AI analysis
+          success: true,
+          message: "Updated article to include AI analysis",
+          status: 200,
+        };
+      } catch (error) {
+        console.error("Error analyzing article:", error);
+        return {
+          success: false,
+          message: "Could not analyze article",
+          status: 500,
+        };
+      }
+    },
+
     getSingleArticle: async (_, { input }) => {
       try {
         const foundArticle = await Article.findOne({
@@ -58,7 +131,11 @@ export const resolvers: Resolvers = {
 
         return {
           message: "Article found",
-          article: foundArticle,
+          article: {
+            id: foundArticle.id,
+            ...foundArticle.toObject(),
+          },
+
           success: true,
           status: 200,
         };
