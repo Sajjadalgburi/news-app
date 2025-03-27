@@ -31,7 +31,7 @@ const ArticleCard: React.FC<Props> = ({
             alt={article.title}
             layout="fill"
             objectFit="cover"
-            className={`rounded-t-xl ${isFeatured}`}
+            className={`rounded-t-xl `}
           />
         </div>
       )}
@@ -45,12 +45,9 @@ const ArticleCard: React.FC<Props> = ({
         {hasImage !== true && (
           <p
             className={`${
-              isFeatured ? "text-xl" : "text-xs"
+              isFeatured ? "text-md" : "text-xs"
             } text-gray-700 line-clamp-3 text-wrap`}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae
-            exercitationem impedit perspiciatis nam, deleniti tempora sed
-            necessitatibus alias neque consequatur vero iusto et minus.
-            Excepturi deleniti fuga sed optio perferendis!
+            {article.description}
           </p>
         )}
 
@@ -58,7 +55,6 @@ const ArticleCard: React.FC<Props> = ({
           <span className="font-medium capitalize">
             By: {article.author ? article.author : "anonymous"}
           </span>
-          {/* Todo : make sure to format date using date-fs */}
           <span>{formatDate(article.publishedAt)}</span>
         </div>
       </div>
