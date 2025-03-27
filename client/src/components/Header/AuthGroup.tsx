@@ -9,7 +9,7 @@ const AuthGroup = () => {
         <Link href="/login">Login</Link>
       </Button>{" "}
       <Button variant={"secondary"} asChild>
-        <Link href="/register">Login</Link>
+        <Link href="/register">Register</Link>
       </Button>{" "}
     </div>
   );
