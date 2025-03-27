@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+import { ArtificialIntelligenceType } from "./types";
 
 export type ArticleModel = {
   title: string;
@@ -11,6 +12,7 @@ export type ArticleModel = {
   image?: string;
   author?: string;
   comments?: CommentModel[];
+  ai: ArtificialIntelligenceType;
 };
 
 export type SourceModel = {
