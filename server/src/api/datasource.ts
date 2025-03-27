@@ -9,10 +9,7 @@ const apiKey = process.env.NEWS_API_KEY;
  * There are various methods for fetching specific things
  */
 export class ArticlesAPI extends RESTDataSource {
-  // !
-  // todo :  make sure to change country back to 'ca'
-  // !
-  baseURL = `https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&country=us`;
+  baseURL = `https://newsapi.org/v2/top-headlines?apiKey=${apiKey}&country=ca`;
 
   async getHomePageArticles(): Promise<ArticleModel[]> {
     const response = await this.get<NewsAPIResponse>("");
