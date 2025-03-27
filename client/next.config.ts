@@ -3,13 +3,13 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
 
+  allowedDevOrigins: ["http://localhost:5000", "http://localhost:5000/graphql"],
+
+  // by default, Next.js will block any external image domains. We need to disable this behavior.
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "upload.wikimedia.org",
-      },
-    ],
+    remotePatterns: [], // No remote images allowed
+    domains: [], // Blocks external image domains
+    unoptimized: true, // (Optional) Disables Next.js image optimization
   },
 };
 
