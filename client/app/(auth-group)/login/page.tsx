@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import AuthComponent from "@/src/components/AuthComponent";
 import { useMutation } from "@apollo/client";
 import { LOG_USER_IN } from "@/src/graphql/mutations";
+import { useRouter } from "next/navigation";
 
 // Define Zod Schema
 export const formSchema = z.object({
@@ -22,7 +23,6 @@ export const formSchema = z.object({
 
 // Infer TypeScript Type from Schema
 export type FormValues = z.infer<typeof formSchema>;
-
 const LoginPage = () => {
   // Define form
   const form = useForm<FormValues>({
@@ -32,6 +32,7 @@ const LoginPage = () => {
       password: "",
     },
   });
+  const router = useRouter();
 
   // Define the mutation
   const [loginMutation, { error, loading }] = useMutation(LOG_USER_IN);
@@ -49,6 +50,7 @@ const LoginPage = () => {
         toast.error(message ?? "Login failed. Please try again.");
       } else if (status === 200) {
         toast.success("Login successful! Redirecting...");
+        router.push("/");
       } else {
         toast.error("Not sure what to do with this yet");
       }

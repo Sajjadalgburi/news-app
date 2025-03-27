@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import AuthComponent from "@/src/components/AuthComponent";
 import { useMutation } from "@apollo/client";
 import { REGUSTER_NEW_USER } from "@/src/graphql/mutations";
+import { useRouter } from "next/navigation";
 
 // Define Zod Schema
 export const formSchema = z.object({
@@ -31,7 +32,7 @@ const RegisterPage = () => {
   });
 
   const [registerMutation, { error, loading }] = useMutation(REGUSTER_NEW_USER);
-
+  const router = useRouter();
   const onSubmit = async ({
     email,
     password,
@@ -50,6 +51,7 @@ const RegisterPage = () => {
         toast.error(message ?? "Registration failed. Please try again.");
       } else if (status === 200 && success) {
         toast.success(message ?? "Login successful! Redirecting...");
+        router.push("/");
       } else {
         toast.error("Not sure what to do with this yet");
       }
