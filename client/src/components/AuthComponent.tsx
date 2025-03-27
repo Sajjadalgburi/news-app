@@ -97,7 +97,7 @@ const AuthComponent = ({
               </FormItem>
             )}
           />
-          {watchPassword.length > 5 ? (
+          {watchPassword.length > 5 && !isLoggingIn && (
             <FormField
               control={form.control}
               name="confirmPassword"
@@ -123,10 +123,14 @@ const AuthComponent = ({
                 </FormItem>
               )}
             />
-          ) : null}
+          )}
           <div className="flex justify-center w-full">
             <Button
-              disabled={loading || !passwordMatch}
+              disabled={
+                loading || isLoggingIn
+                  ? watchPassword.length < 6
+                  : !passwordMatch
+              }
               className="w-full cursor-pointer"
               type="submit">
               {buttonText}
