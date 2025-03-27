@@ -21,13 +21,13 @@ const Articles: React.FC<Props> = ({ articles, loading, error }) => {
     <ArticleLaytout>
       {/* Masonry-style column layout */}
       <div className="max-w-7xl mx-auto md:columns-2 lg:columns-3 xl:columns-4 space-y-4 md:space-y-6 md:gap-6">
-        {shuffledArticles.map((article) => {
+        {shuffledArticles.map((article, i) => {
           const isFeatured = Math.random() > 0.9;
           const hasImage = Math.random() > 0.5;
 
           return (
             <div
-              key={article.source.name + article.title}
+              key={article.content?.slice(0, i) ?? ""}
               className={`break-inside-avoid rounded-xl shadow-xl p-4 ${
                 isFeatured
                   ? "bg-gray-200"
