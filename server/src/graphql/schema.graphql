@@ -24,6 +24,13 @@ type Mutation {
   createComment(input: CreateCommentInput!): AuthResponse!
 }
 
+type ArtificialIntelligenceType {
+  biasRating: Int!
+  summerizedContent: String!
+  worthinessRating: Int!
+  createdAt: String
+}
+
 input SaveArticleInput {
   # The headline or title of the article.
   title: String!
@@ -87,6 +94,8 @@ type Article {
   author: String
   # Fetches all comments related to this article by matching the URL.
   comments: [Comment]
+  # The AI generated content for the article
+  ai: ArtificialIntelligenceType
 }
 
 # Represents the source of the article.
