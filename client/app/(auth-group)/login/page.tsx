@@ -50,11 +50,10 @@ const LoginPage = () => {
       } else if (status === 200) {
         toast.success("Login successful! Redirecting...");
       } else {
-        toast.error("Login failed. Please try again.");
+        toast.error("Not sure what to do with this yet");
       }
     } catch (e) {
-      console.error("Mutation error:", e);
-      toast.error("An error occurred. Please try again.");
+      toast.error(`An error occurred. ${e}`);
     } finally {
       form.reset();
     }
