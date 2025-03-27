@@ -6,7 +6,7 @@
     "run-server": "cd server && npm run dev",
     "run-client": "cd client && npm run dev",
     "install": "concurrently --names \"server,client\" --prefix \"[{name}]\" --color \"bgMagenta.bold\" \"cd server && npm install\" \"cd client && npm install\"",
-    "start": "concurrently --names \"server,client\" --prefix \"[{name}]\" --color \"bgGreen.bold\" \"cd server && npm run dev\" \"cd client && npm run dev\""
+    "start": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\""
   },
   "keywords": [],
   "author": "",
