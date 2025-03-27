@@ -2,19 +2,13 @@ import React from "react";
 import ArticleLaytout from "./ArticleLaytout";
 import ArticleCard from "./ArticleCard";
 import ArticleLoadingState from "./ArticleLoadingState";
-
-interface Article {
-  title: string;
-  image?: string;
-  content: string;
-  author: string;
-  publishedAt: string;
-}
+import { ApolloError } from "@apollo/client";
+import { Article } from "@/__generated__/graphql";
 
 interface Props {
   articles: Article[];
   loading: boolean;
-  error: any;
+  error: ApolloError | undefined;
 }
 
 const Articles: React.FC<Props> = ({ articles, loading, error }) => {
@@ -27,13 +21,13 @@ const Articles: React.FC<Props> = ({ articles, loading, error }) => {
     <ArticleLaytout>
       {/* Masonry-style column layout */}
       <div className="max-w-7xl mx-auto md:columns-2 lg:columns-3 xl:columns-4 space-y-4 md:space-y-6 md:gap-6">
-        {shuffledArticles.map((article, i) => {
+        {shuffledArticles.map((article) => {
           const isFeatured = Math.random() > 0.9;
           const hasImage = Math.random() > 0.5;
 
           return (
             <div
-              key={i}
+              key={article.source.name + article.title}
               className="break-inside-avoid bg-gray-100 rounded-xl shadow-md p-4">
               <ArticleCard
                 article={article}
