@@ -26,7 +26,11 @@ const userSchema: Schema<UserDocument> = new Schema({
     trim: true,
   },
 
-  profilePicture: { type: String },
+  profilePicture: {
+    type: String,
+    default:
+      "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
+  },
   password: {
     type: String,
     required: [true, "Password is required"],
