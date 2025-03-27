@@ -42,3 +42,21 @@ export const ARTICLES_FOR_CATEGORY = gql(`
     }
   }
 `);
+
+/**
+ * Will fetch the currently logged in user if they exist.
+ */
+export const GET_ME = gql(`
+  query Query {
+  me {
+    user {
+      id
+      name
+      email
+    }
+    success
+    message
+    status
+  }
+}
+`);
