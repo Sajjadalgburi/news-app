@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gen": "graphql-codegen --watch"
+    "gen": "graphql-codegen --watch",
+    "dev": "concurrently -n \"CODEGEN,NEXT\" -c \"blue,green\" \"graphql-codegen --watch\" \"next dev --turbopack\""
   },
   "dependencies": {
     "@apollo/client": "^3.13.5",
@@ -20,6 +20,7 @@
     "@radix-ui/react-slot": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "concurrently": "^9.1.2",
     "graphql": "^16.10.0",
     "lucide-react": "^0.484.0",
     "next": "15.2.3",
