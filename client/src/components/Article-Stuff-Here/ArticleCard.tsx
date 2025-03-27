@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Article } from "@/__generated__/graphql";
+import { formatDate } from "@/src/helpers";
 
 interface Props {
   article: Article;
@@ -54,9 +55,11 @@ const ArticleCard: React.FC<Props> = ({
         )}
 
         <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
-          <span className="font-medium">By: {article.author}</span>
+          <span className="font-medium capitalize">
+            By: {article.author ? article.author : "anonymous"}
+          </span>
           {/* Todo : make sure to format date using date-fs */}
-          <span>{article.publishedAt}</span>
+          <span>{formatDate(article.publishedAt)}</span>
         </div>
       </div>
     </Link>
