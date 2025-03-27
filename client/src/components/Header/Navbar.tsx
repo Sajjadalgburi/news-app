@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { categories } from "../../helpers/constants";
+import { categories } from "../../src/helpers/constants";
 import { ThemeToggle } from "../ThemeToggle";
 import AuthGroup from "./AuthGroup";
 import CatagoryTitle from "../CatagoryTitle";

@@ -1,6 +1,7 @@
 "use client";
 
-import { categories } from "@/helpers/constants";
+import Articles from "@/src/components/Article-Stuff-Here/Articles";
+import { categories } from "@/src/helpers/constants";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
@@ -25,8 +26,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <div>
-      <h1>Category: {category.toUpperCase()}</h1>
-      <p>Showing posts for the &quot;{category}&quot; category.</p>
+      {/* <Articles articles={fakeData} loading={true} error={null} /> */}
     </div>
   );
 }
