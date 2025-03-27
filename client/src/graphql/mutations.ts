@@ -17,3 +17,13 @@ export const LOG_USER_IN = gql(`
     status
   }
 }`);
+
+export const REGUSTER_NEW_USER =
+  gql(`mutation RegisterMutation($name: String!, $email: String!, $password: String!) {
+  register(name: $name, email: $email, password: $password) {
+    success
+    message
+    status
+    token
+  }
+}`);
