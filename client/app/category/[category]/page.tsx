@@ -31,19 +31,11 @@ export default function CategoryPage({ params }: CategoryPageProps) {
 
   if (!isValidCategory) return null; // Prevents flicker
 
-  console.log({
-    data,
-    loading,
-    error,
-  });
-
   return (
-    <div>
-      <Articles
-        articles={data.getCategory as Article[]}
-        loading={loading}
-        error={error}
-      />
-    </div>
+    <Articles
+      articles={data.getCategory as Article[]}
+      loading={loading}
+      error={error}
+    />
   );
 }
