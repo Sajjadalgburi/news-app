@@ -28,7 +28,7 @@ export class ArticlesAPI extends RESTDataSource {
    */
   async getCategory(category: categoryTypes): Promise<ArticleModel[]> {
     const response = await this.get<NewsAPIResponse>(
-      `?apiKey=${apiKey}&sortBy=popularity&${newsOutlets}&from=${goBackFiveDays()}&to=${getToday()}&q=${encodeURIComponent(
+      `?apiKey=${apiKey}&sortBy=relevance&${newsOutlets}&from=${goBackFiveDays()}&to=${getToday()}&q=${encodeURIComponent(
         category,
       )}`,
     );
