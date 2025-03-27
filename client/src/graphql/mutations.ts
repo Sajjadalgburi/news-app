@@ -6,5 +6,8 @@ export const SAVE_ARTICLE = gql(`
     success
     message
     status
+    article {
+      id
+    }
   }
 }`);
