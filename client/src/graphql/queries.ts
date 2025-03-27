@@ -81,11 +81,27 @@ export const GET_ARTICLE_BASED_ON_SEARCH = gql(`
   }
 }`);
 
-// todo
 /**
  * This query will fetch a single article based on the articles ID from mongoDB.
  * When the user clicks on an article, 1. the article will be saved into the database
  * 2. the article will be fetched from the database and displayed to the user.
  */
-export const GET_SINGLE_ARTICLE = gql(``);
-// todo
+export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
+  getSingleArticle(input: $input) {
+    message
+    status
+    article {
+      title
+      publishedAt
+      source {
+        name
+        id
+      }
+      url
+      description
+      content
+      image
+      author
+    }
+  }
+}`);
