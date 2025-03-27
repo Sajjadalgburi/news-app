@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Button } from "./ui/button";
 import {
@@ -9,22 +11,21 @@ import {
   FormMessage,
 } from "@/src/components/ui/form";
 import { Input } from "./ui/input";
-import { UseFormReturn } from "react-hook-form";
-import { FormValues } from "@/app/(auth-group)/login/page";
 import Link from "next/link";
+import { FormValuesRegisterPage } from "@/app/(auth-group)/register/page";
 
 interface Props {
   loading: boolean;
+  onSubmit: (values: FormValuesRegisterPage) => Promise<void>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onFormSubmit: (values: any) => void;
-  form: UseFormReturn<FormValues>;
+  form: any;
   isLoggingIn: boolean;
   error: Error | null | unknown;
 }
 
 const AuthComponent = ({
   form,
-  onFormSubmit,
+  onSubmit,
   isLoggingIn = true,
   loading,
   error,
@@ -37,6 +38,10 @@ const AuthComponent = ({
     ? "Login"
     : "Register";
 
+  const watchConfirmPassword = form.watch("confirmPassword");
+  const watchPassword = form.watch("password");
+  const passwordMatch: boolean = watchConfirmPassword === watchPassword;
+
   return (
     <section className="flex flex-col w-80 p-4 rounded-xl space-y-4 md:mt-[10rem] shadow-xl justify-center bg-accent max-w-7xl mx-auto">
       <h1 className="md:text-4xl text-lg font-semibold capitalize text-center">
@@ -48,7 +53,7 @@ const AuthComponent = ({
           : "Register a new account"}
       </span>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onFormSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           {isLoggingIn === false ? (
             <FormField
               control={form.control}
@@ -93,12 +98,40 @@ const AuthComponent = ({
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Confirm Password</FormLabel>
+                <FormControl>
+                  <Input placeholder="********" {...field} />
+                </FormControl>
+                <span className="text-left text-sm line-clamp-1">
+                  {watchPassword.length > 5 &&
+                  watchConfirmPassword?.length > 1 ? (
+                    !passwordMatch ? (
+                      <p className="text-red-500">Passwords do not match</p>
+                    ) : (
+                      <p className="text-green-500">
+                        Passwords match! You can proceed
+                      </p>
+                    )
+                  ) : null}
+                </span>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="flex justify-center w-full">
-            <Button className="w-full cursor-pointer" type="submit">
+            <Button
+              disabled={loading || !passwordMatch}
+              className="w-full cursor-pointer"
+              type="submit">
               {buttonText}
             </Button>
           </div>
-          <div className=" divider" />
+          <div className="border-b-1" />
           <div className="text-center text-sm text-gray-500">
             {isLoggingIn ? (
               <>
