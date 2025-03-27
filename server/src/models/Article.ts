@@ -33,12 +33,9 @@ const ArticleSchema = new Schema<ArticleDocument>({
   },
   image: {
     type: String,
-    required: true,
-    validate: {
-      validator: (value: string) =>
-        /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/.test(value),
-      message: "Invalid image URL format",
-    },
+    required: false,
+    default:
+      "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
   },
   description: {
     type: String,
