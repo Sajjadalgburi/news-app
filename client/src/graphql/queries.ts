@@ -60,3 +60,32 @@ export const GET_ME = gql(`
   }
 }
 `);
+
+/**
+ * This query will fetch all articles based on a search query from a search bar or something related
+ */
+export const GET_ARTICLE_BASED_ON_SEARCH = gql(`
+  query Query($question: String!) {
+  getArticlesBasedOnSearch(question: $question) {
+    title
+    publishedAt
+    source {
+      name
+      id
+    }
+    url
+    description
+    content
+    image
+    author
+  }
+}`);
+
+// todo
+/**
+ * This query will fetch a single article based on the articles ID from mongoDB.
+ * When the user clicks on an article, 1. the article will be saved into the database
+ * 2. the article will be fetched from the database and displayed to the user.
+ */
+export const GET_SINGLE_ARTICLE = gql(``);
+// todo
