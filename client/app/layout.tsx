@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/src/components/theme-provider";
 import Navbar from "@/src/components/Header/Navbar";
 import CustomApolloProvider from "@/src/components/CustomApolloProvider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,6 +38,7 @@ export default function RootLayout({
             disableTransitionOnChange>
             <Navbar />
             {children}
+            <Toaster position="top-center" />
           </ThemeProvider>
         </CustomApolloProvider>
       </body>
