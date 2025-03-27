@@ -28,7 +28,13 @@ const Articles: React.FC<Props> = ({ articles, loading, error }) => {
           return (
             <div
               key={article.source.name + article.title}
-              className="break-inside-avoid bg-gray-100 rounded-xl shadow-md p-4">
+              className={`break-inside-avoid rounded-xl shadow-xl p-4 ${
+                isFeatured
+                  ? "bg-gray-200"
+                  : hasImage
+                  ? "bg-red-300/60"
+                  : "bg-red-400"
+              }`}>
               <ArticleCard
                 article={article}
                 isFeatured={isFeatured}
