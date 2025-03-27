@@ -1,7 +1,18 @@
 import OpenAI from "openai";
 import { ArtificialIntelligenceType } from "../types/types";
+import "dotenv/config";
 
-const client = new OpenAI();
+if (!process.env.OPENAI_API_KEY) {
+  throw new Error(
+    "OPENAI_API_KEY is not defined in the environment variables.",
+  );
+}
+
+const apiKey = process.env.OPENAI_API_KEY;
+
+const client = new OpenAI({
+  apiKey,
+});
 
 /**
  * Analyzes an article by summarizing it, providing a bias rating, and a worthiness rating.
