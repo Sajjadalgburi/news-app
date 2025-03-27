@@ -1,14 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-
-interface Article {
-  title: string;
-  image?: string;
-  content: string;
-  author: string;
-  publishedAt: string;
-}
+import { Article } from "@/__generated__/graphql";
 
 interface Props {
   article: Article;
