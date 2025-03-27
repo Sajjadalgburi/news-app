@@ -59,6 +59,10 @@ const ArticleSchema = new Schema<ArticleDocument>({
     type: Date,
     default: Date.now,
   },
+  ai: {
+    type: Object,
+    required: false,
+  },
 });
 
 const Article = model<ArticleDocument>("Article", ArticleSchema);
