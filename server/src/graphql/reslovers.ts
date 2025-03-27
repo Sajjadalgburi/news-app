@@ -42,18 +42,33 @@ export const resolvers: Resolvers = {
       }));
     },
 
-    // Todo: Re-Implement this method to fetch articles from MongoDB, after they have been saved
-    getSingleArticle: async (_, { title }, { dataSources }) => {
-      const article = await dataSources.articlesAPI.getSingleArticle(title);
+    getSingleArticle: async (_, { input }) => {
+      try {
+        const foundArticle = await Article.findOne({
+          title: input,
+        });
 
-      if (!article) {
-        return null; // Return null instead of an empty array
+        if (!foundArticle) {
+          return {
+            success: false,
+            message: "Article not found",
+            status: 404,
+          };
+        }
+
+        return {
+          message: "Article found",
+          article: foundArticle,
+          success: true,
+          status: 200,
+        };
+      } catch (error) {
+        return {
+          message: "Could not find article",
+          success: false,
+          status: 500,
+        };
       }
-
-      return {
-        ...article,
-        image: article.urlToImage,
-      };
     },
 
     getArticlesBasedOnSearch: async (_, { question }, { dataSources }) => {
