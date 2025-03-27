@@ -5,8 +5,8 @@ type Query {
   displayTrendingArticles: [Article]! # must be an array of non-null
   # Query to get a category by a given string
   getCategory(category: String!): [Article!]!
-  # Query which fetches a single article with the provided title
-  getSingleArticle(title: String!): Article
+  # Query which fetches a single article from our database based on the ID
+  getSingleArticle(input: String!): AuthResponse!
   # Query to fetch an array of related articles based on the based in question query
   getArticlesBasedOnSearch(question: String!): [Article]!
   # This will return the currently signed in user
@@ -119,6 +119,8 @@ type AuthResponse {
   message: String!
   # status code of the operation
   status: Int!
+  # The article that was saved. if any
+  article: Article
 }
 
 # Represents a user comment on an article
