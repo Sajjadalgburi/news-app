@@ -91,38 +91,39 @@ const AuthComponent = ({
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="********" {...field} />
+                  <Input type="password" placeholder="********" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl>
-                  <Input placeholder="********" {...field} />
-                </FormControl>
-                <span className="text-left text-sm line-clamp-1">
-                  {watchPassword.length > 5 &&
-                  watchConfirmPassword?.length > 1 ? (
-                    !passwordMatch ? (
-                      <p className="text-red-500">Passwords do not match</p>
-                    ) : (
-                      <p className="text-green-500">
-                        Passwords match! You can proceed
-                      </p>
-                    )
-                  ) : null}
-                </span>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {watchPassword.length > 5 ? (
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="********" {...field} />
+                  </FormControl>
+                  <span className="text-left text-sm line-clamp-1">
+                    {watchPassword.length > 5 &&
+                    watchConfirmPassword?.length > 1 ? (
+                      !passwordMatch ? (
+                        <p className="text-red-500">Passwords do not match</p>
+                      ) : (
+                        <p className="text-green-500">
+                          Passwords match! You can proceed
+                        </p>
+                      )
+                    ) : null}
+                  </span>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          ) : null}
           <div className="flex justify-center w-full">
             <Button
               disabled={loading || !passwordMatch}
