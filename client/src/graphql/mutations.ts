@@ -8,3 +8,12 @@ export const SAVE_ARTICLE = gql(`
     status
   }
 }`);
+
+export const LOG_USER_IN = gql(`
+  mutation LoginMutation($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    message
+    token
+    status
+  }
+}`);
