@@ -11,6 +11,8 @@ type Query {
   getArticlesBasedOnSearch(question: String!): [Article]!
   # This will return the currently signed in user
   me: AuthResponse!
+  # Query to grab the article analasis from the AI
+  getAIAnalysis(content: String!, articleId: ID!): AIResponse!
 }
 
 type Mutation {
@@ -24,9 +26,16 @@ type Mutation {
   createComment(input: CreateCommentInput!): AuthResponse!
 }
 
+type AIResponse {
+  ai: ArtificialIntelligenceType
+  status: Int!
+  message: String!
+  success: Boolean!
+}
+
 type ArtificialIntelligenceType {
   biasRating: Int!
-  summerizedContent: String!
+  summarizedContent: String!
   worthinessRating: Int!
   createdAt: String
 }
@@ -76,6 +85,7 @@ input SourceInput {
 }
 
 type Article {
+  id: ID
   # The headline or title of the article.
   title: String!
   # The date and time that the article was published, in UTC (+000).
