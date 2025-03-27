@@ -29,11 +29,10 @@ const ArticleCard: React.FC<Props> = ({
 
     try {
       await saveArticle(); // Ensure article is saved before redirecting
-
       if (loading && error) {
         return;
       } else {
-        router.push(`/article/${encodeURIComponent(article.title)}`);
+        router.push(`/article?q=${encodeURIComponent(article.title)}`);
       }
     } catch (error) {
       console.error("Failed to save article:", error);
