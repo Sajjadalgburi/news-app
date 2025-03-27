@@ -91,6 +91,7 @@ export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
     message
     status
     article {
+      id
       title
       publishedAt
       source {
@@ -102,6 +103,26 @@ export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
       content
       image
       author
+      ai {
+        worthinessRating
+        summarizedContent
+        biasRating
+      }
+    }
+    
+  }
+}`);
+
+export const GET_ARTICLE_AI_ANALYSIS = gql(`
+  query QueryAiAnalasis($content: String!, $articleId: ID!) {
+  getAIAnalysis(content: $content, articleId: $articleId) {
+    status
+    message
+    success
+    ai {
+      worthinessRating
+      summarizedContent
+      biasRating
     }
   }
 }`);
