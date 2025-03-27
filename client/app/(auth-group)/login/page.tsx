@@ -1,59 +1,71 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import AuthComponent from "@/src/components/AuthComponent";
+import { useMutation } from "@apollo/client";
+import { LOG_USER_IN } from "@/src/graphql/mutations";
 
 // Define Zod Schema
 export const formSchema = z.object({
-  email: z.string().min(2).max(50),
-  password: z.string().min(8).max(100),
-  username: z.string().min(2).max(50),
+  email: z
+    .string()
+    .min(2)
+    .max(50)
+    .email("Invalid email address")
+    .nonempty("Email is required"),
+  password: z.string().min(6).max(30).nonempty("Password is required"),
 });
 
 // Infer TypeScript Type from Schema
 export type FormValues = z.infer<typeof formSchema>;
 
 const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | null | unknown>(null);
-
   // Define form
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
-      username: "",
     },
   });
 
+  // Define the mutation
+  const [loginMutation, { error, loading }] = useMutation(LOG_USER_IN);
   // Handle form submission
-  const onSubmit = async (values: FormValues) => {
+  async function onSubmit({ email, password }: z.infer<typeof formSchema>) {
     try {
-      setLoading(true);
-      toast.success("You have successfully logged in!");
-      // Handle API call or authentication logic
+      const res = await loginMutation({
+        variables: { email, password },
+      });
+
+      // todo : do something with the token
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { message, status, token } = res.data?.login || {};
+      if (status === 400) {
+        toast.error(message ?? "Login failed. Please try again.");
+      } else if (status === 200) {
+        toast.success("Login successful! Redirecting...");
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
     } catch (e) {
-      setError(e);
+      console.error("Mutation error:", e);
       toast.error("An error occurred. Please try again.");
     } finally {
-      setLoading(false);
-      setError(null);
-      setLoading(false);
       form.reset();
     }
-  };
+  }
 
   return (
     <AuthComponent
       isLoggingIn={true}
       loading={loading}
       error={error}
-      onFormSubmit={onSubmit}
+      onSubmit={onSubmit}
       form={form}
     />
   );
