@@ -33,8 +33,7 @@ export default function RootLayout({
         <CustomApolloProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
-            enableSystem
+            defaultTheme="light"
             disableTransitionOnChange>
             <Navbar />
             {children}
