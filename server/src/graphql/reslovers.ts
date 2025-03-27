@@ -147,7 +147,7 @@ export const resolvers: Resolvers = {
         if (userExists) {
           return {
             success: false,
-            message: `User with ${email} already exists`,
+            message: `${email} is already in use`,
             status: 400,
           };
         }
