@@ -42,6 +42,7 @@ export const resolvers: Resolvers = {
       }));
     },
 
+    // Todo: Re-Implement this method to fetch articles from MongoDB, after they have been saved
     getSingleArticle: async (_, { title }, { dataSources }) => {
       const article = await dataSources.articlesAPI.getSingleArticle(title);
 
@@ -71,13 +72,49 @@ export const resolvers: Resolvers = {
     },
 
     // Todo: Implement the me query later with mongodb
-    // me: async (_, __, {}) => {
-    //   return {
-    //     id: "1",
-    //     email: "  ",
-    //     username: "  ",
-    //   };
-    // },
+    me: async (_, __, { user }) => {
+      try {
+        // first check is to see if the user is logged in
+        if (!user) {
+          return {
+            message: "You are not logged in",
+            status: 401,
+            success: false,
+            user: null,
+          };
+        }
+
+        // find the user in the database
+        const userInDatabase = await User.findById(user.id);
+
+        if (!userInDatabase) {
+          return {
+            message: "User not found",
+            status: 404,
+            success: false,
+            user: null,
+          };
+        }
+
+        return {
+          message: "User found",
+          success: true,
+          user: {
+            id: userInDatabase.id,
+            email: userInDatabase.email,
+            name: userInDatabase.name,
+          },
+          status: 200,
+        };
+      } catch (error) {
+        return {
+          message: "Could not find user",
+          status: 500,
+          success: false,
+          user: null,
+        };
+      }
+    },
   },
 
   Mutation: {
