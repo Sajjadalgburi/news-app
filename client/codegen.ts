@@ -3,7 +3,7 @@ import { CodegenConfig } from "@graphql-codegen/cli";
 const config: CodegenConfig = {
   // ! Schema might be pointing to a remote server, so we need to specify the URL
   schema: "http://localhost:5000/graphql",
-  documents: ["src/**/*.tsx"],
+  documents: ["src/graphql/**/*.ts"],
   generates: {
     "./__generated__/": {
       preset: "client",
