@@ -9,6 +9,7 @@ import CatagoryTitle from "../CatagoryTitle";
 import useUser from "@/hooks/useUser";
 import UserLoggedIn from "../UserLoggedIn";
 import MobileSheet from "../MobileSheet";
+import { SearchBar } from "../SearchBar";
 
 const Navbar = () => {
   const { user } = useUser();
@@ -49,6 +50,7 @@ const Navbar = () => {
           <MobileSheet user={user} />
         </div>
       </nav>
+      <SearchBar />
     </header>
   );
 };
