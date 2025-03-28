@@ -1,11 +1,11 @@
 import { Article } from "@/__generated__/graphql";
 import { ApolloError, useQuery } from "@apollo/client";
 import React, { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { GET_ARTICLE_AI_ANALYSIS } from "@/graphql/queries";
 import { Skeleton } from "../../ui/skeleton";
 import { Button } from "@/components/ui/button";
+import RenderImage from "@/components/RenderImage";
 
 interface Props {
   article: Article;
@@ -47,12 +47,7 @@ const ArticleComponent = ({ article, error, loading }: Props) => {
       {/* Article Image */}
       {article.image && (
         <div className="relative w-full h-80 mb-4 rounded-lg overflow-hidden shadow-md">
-          <Image
-            src={article.image}
-            alt={article.title}
-            layout="fill"
-            objectFit="cover"
-          />
+          <RenderImage image={article.image} alt={article.title} />
         </div>
       )}
 
