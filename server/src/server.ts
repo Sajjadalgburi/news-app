@@ -31,7 +31,12 @@ const startServer = async () => {
   // Ensure we wait for our server to start
   await server.start();
 
-  app.use(cors());
+  app.use(
+    cors({
+      origin: "http://localhost:3000", // Allow requests from Next.js
+      credentials: true, // Allow cookies to be sent
+    }),
+  );
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
