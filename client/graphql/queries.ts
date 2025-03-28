@@ -126,3 +126,15 @@ export const GET_ARTICLE_AI_ANALYSIS = gql(`
     }
   }
 }`);
+
+/**
+ * Query to logout the user from the application.
+ * This will remove the JWT token from the local storage and set the user to null in the state.
+ */
+export const LOGOUT_USER = gql(`
+  query logout {
+  logout {
+    success
+    status
+  }
+}`);
