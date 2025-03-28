@@ -1,31 +1,22 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
 import React from "react";
 import { categories } from "@/helpers/constants";
 import { ThemeToggle } from "../ThemeToggle";
 import AuthGroup from "./AuthGroup";
 import CatagoryTitle from "../CatagoryTitle";
-
-const user = {
-  loggedIn: false,
-  name: "John Doe",
-  imageUrl:
-    "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png",
-};
+import useUser from "@/hooks/useUser";
+import UserLoggedIn from "../UserLoggedIn";
 
 const Navbar = () => {
+  const { user } = useUser();
+
   return (
     <header className="bg-accent rounded-md max-w-[90%] mx-auto shadow-md sticky top-0 z-50">
       <nav className="flex justify-between items-center p-4 ">
         <div className="flex items-center justify-center gap-2">
-          <Image
-            src={user.imageUrl}
-            width={50}
-            height={50}
-            className="rounded-full"
-            alt="User Image"
-          />
-
+          {/* todo : Add app logo here */}
           <Link
             className="capitalize md:text-3xl text-lg font-semibold"
             href={"/"}>
@@ -40,13 +31,13 @@ const Navbar = () => {
           ))}
         </div>
 
+        {/* Desktop */}
         {/* Outmost right hand side */}
         <div className="flex gap-2 justify-center items-center">
           <ThemeToggle />
-          {user.loggedIn ? (
-            <div>
-              <span>render stuff when user is logged in</span>
-            </div>
+          {user ? (
+            // the logout and profile button group
+            <UserLoggedIn />
           ) : (
             // Render this when user is not logged in
             <AuthGroup />
