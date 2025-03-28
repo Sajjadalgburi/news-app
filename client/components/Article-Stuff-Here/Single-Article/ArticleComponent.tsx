@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { GET_ARTICLE_AI_ANALYSIS } from "@/graphql/queries";
 import { Skeleton } from "../../ui/skeleton";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   article: Article;
@@ -99,11 +100,13 @@ const ArticleComponent = ({ article, error, loading }: Props) => {
       </div>
 
       {/* Toggle Summary Button */}
-      <button
-        onClick={() => setShowSummary(!showSummary)}
-        className="mt-6 px-6 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all">
-        {showSummary ? "Show Full Article" : "Show AI Summary"}
-      </button>
+      {!AiAnalysisLoading && !AiAnalysisError ? (
+        <Button
+          onClick={() => setShowSummary(!showSummary)}
+          className="mt-6 px-6 py-2 cursor-pointer rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all">
+          {showSummary ? "Show Full Article" : "Show AI Summary"}
+        </Button>
+      ) : null}
 
       {/* Source & Link */}
       <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
