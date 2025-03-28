@@ -3,8 +3,8 @@
 import React from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@apollo/client";
-import { GET_SINGLE_ARTICLE } from "@/src/graphql/queries";
-import ArticleComponent from "@/src/components/Article-Stuff-Here/Single-Article/ArticleComponent";
+import { GET_SINGLE_ARTICLE } from "@/graphql/queries";
+import ArticleComponent from "@/components/Article-Stuff-Here/Single-Article/ArticleComponent";
 import { Article } from "@/__generated__/types";
 
 const ArticlePage = () => {

@@ -3,7 +3,7 @@ import { ApolloError, useQuery } from "@apollo/client";
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { GET_ARTICLE_AI_ANALYSIS } from "@/src/graphql/queries";
+import { GET_ARTICLE_AI_ANALYSIS } from "@/graphql/queries";
 import { Skeleton } from "../../ui/skeleton";
 
 interface Props {

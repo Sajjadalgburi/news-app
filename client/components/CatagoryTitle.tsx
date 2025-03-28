@@ -10,7 +10,9 @@ const CategoryTitle = ({ name }: { name: string }) => {
   return (
     <Link
       className={`capitalize p-2 rounded-lg transition ${
-        isActive ? "bg-gray-200 font-semibold" : "hover:bg-gray-200"
+        isActive
+          ? "dark:bg-background/90 bg-gray-300 font-semibold"
+          : "hover:bg-gray-200 dark:hover:bg-white/20"
       }`}
       href={`/category/${name.toLowerCase()}`}>
       {name}

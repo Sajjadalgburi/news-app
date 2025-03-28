@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/src/components/theme-provider";
-import Navbar from "@/src/components/Header/Navbar";
-import CustomApolloProvider from "@/src/components/CustomApolloProvider";
+import { ThemeProvider } from "@/components/theme-provider";
+import Navbar from "@/components/Header/Navbar";
+import CustomApolloProvider from "@/components/CustomApolloProvider";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({

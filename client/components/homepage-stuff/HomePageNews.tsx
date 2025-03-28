@@ -1,8 +1,8 @@
 "use client";
 
 import { Article } from "@/__generated__/graphql";
-import { GET_ARTICLES_FOR_HOMEPAGE } from "@/src/graphql/queries";
-import useFetch from "@/src/helpers/fetch";
+import { GET_ARTICLES_FOR_HOMEPAGE } from "@/graphql/queries";
+import useFetch from "@/helpers/fetch";
 import React from "react";
 import Articles from "../Article-Stuff-Here/Articles";
 

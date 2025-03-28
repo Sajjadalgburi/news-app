@@ -5,9 +5,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import AuthComponent from "@/src/components/AuthComponent";
+import AuthComponent from "@/components/AuthComponent";
 import { useMutation } from "@apollo/client";
-import { LOG_USER_IN } from "@/src/graphql/mutations";
+import { LOG_USER_IN } from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
 
 // Define Zod Schema

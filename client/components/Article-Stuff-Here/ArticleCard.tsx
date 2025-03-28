@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import { Article } from "@/__generated__/graphql";
-import { formatDate } from "@/src/helpers";
-import useSaveArticle from "@/src/helpers/saveArticle";
+import { formatDate } from "@/helpers";
+import useSaveArticle from "@/helpers/saveArticle";
 import { useRouter } from "next/navigation";
 
 interface Props {

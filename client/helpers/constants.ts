@@ -1,4 +1,4 @@
-import { categoryTypes } from "@/src/types";
+import { categoryTypes } from "@/types";
 
 /**
  * @type {Array<{ name: categoryTypes }>}

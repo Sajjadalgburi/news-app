@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, use } from "react";
-import { categories } from "@/src/helpers/constants";
+import { categories } from "@/helpers/constants";
 import { useRouter } from "next/navigation";
-import { GET_ARTICLES_FOR_CATEGORY } from "@/src/graphql/queries";
-import useFetch from "@/src/helpers/fetch";
-import Articles from "@/src/components/Article-Stuff-Here/Articles";
+import { GET_ARTICLES_FOR_CATEGORY } from "@/graphql/queries";
+import useFetch from "@/helpers/fetch";
+import Articles from "@/components/Article-Stuff-Here/Articles";
 import { Article } from "@/__generated__/graphql";
 
 interface CategoryPageProps {
