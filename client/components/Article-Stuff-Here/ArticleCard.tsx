@@ -1,9 +1,9 @@
 import React from "react";
-import Image from "next/image";
 import { Article } from "@/__generated__/graphql";
 import { formatDate } from "@/helpers";
 import useSaveArticle from "@/helpers/saveArticle";
 import { useRouter } from "next/navigation";
+import RenderImage from "../RenderImage";
 
 interface Props {
   article: Article;
@@ -44,16 +44,10 @@ const ArticleCard: React.FC<Props> = ({
       role="button"
       aria-disabled={loading}
       onClick={handleClick}
-      className="block overflow-hidden rounded-xl min-h-fit mx-auto self-center shadow-md transition-transform transform hover:scale-102 hover:underline hover:shadow-lg">
+      className="block overflow-hidden hover:cursor-pointer rounded-xl min-h-fit mx-auto self-center shadow-md transition-transform transform hover:scale-102 hover:underline hover:shadow-lg">
       {image && article.image && (
         <div className={`relative w-full ${isFeatured ? "h-96" : "h-48"}`}>
-          <Image
-            src={article.image}
-            alt={article.title}
-            layout="fill"
-            objectFit="cover"
-            className={`rounded-t-xl `}
-          />
+          <RenderImage image={article.image!} alt={article.title} />
         </div>
       )}
       <div className="flex  flex-col h-full p-4 bg-white ">
