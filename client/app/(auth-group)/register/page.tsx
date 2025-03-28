@@ -7,61 +7,81 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import AuthComponent from "@/components/AuthComponent";
 import { useMutation } from "@apollo/client";
-import { REGUSTER_NEW_USER } from "@/graphql/mutations";
+import { REGISTER_NEW_USER } from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
 
 // Define Zod Schema
-export const formSchema = z.object({
-  email: z.string().min(2).max(50).email("Invalid email address").nonempty(),
-  password: z.string().min(6).max(30).nonempty(),
-  username: z.string().min(2).max(50).nonempty(),
-  confirmPassword: z.string().min(6).max(30).nonempty(),
-});
+export const formSchema = z
+  .object({
+    email: z
+      .string()
+      .email("Invalid email address")
+      .nonempty("Email is required"),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .nonempty("Password is required"),
+    username: z
+      .string()
+      .min(2, "Username is required")
+      .nonempty("Username is required"),
+    confirmPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .nonempty("Confirm Password is required"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 // Infer TypeScript Type from Schema
 export type FormValuesRegisterPage = z.infer<typeof formSchema>;
 
 const RegisterPage = () => {
-  // Define form
   const form = useForm<FormValuesRegisterPage>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
+      username: "",
+      confirmPassword: "",
     },
   });
 
-  const [registerMutation, { error, loading }] = useMutation(REGUSTER_NEW_USER);
   const router = useRouter();
-  const onSubmit = async ({
-    email,
-    password,
-    username,
-  }: FormValuesRegisterPage) => {
-    try {
-      const res = await registerMutation({
-        variables: { email, password, name: username },
-      });
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { message, status, token, success } = res.data?.register || {};
+  // Define the mutation
+  const [registerMutation, { loading, error }] = useMutation(
+    REGISTER_NEW_USER,
+    {
+      onCompleted: (data) => {
+        const { message, status, success } = data?.register || {};
 
-      // todo : do something with the token
-      if (status === 400 && !success) {
-        toast.error(message ?? "Registration failed. Please try again.");
-      } else if (status === 200 && success) {
-        toast.success(message ?? "Login successful! Redirecting...");
-        router.push("/");
-      } else {
-        toast.error("Not sure what to do with this yet");
-      }
-    } catch (e) {
-      toast.error(`An error occurred. ${e}`);
-    } finally {
-      form.reset();
-      form.setValue("confirmPassword", "");
-      form.setValue("username", "");
-    }
+        if (status === 400 && !success) {
+          toast.error(message ?? "Registration failed. Please try again.");
+          return;
+        }
+
+        if (status === 200 && success) {
+          toast.success(message ?? "Registration successful! Redirecting...");
+          router.push("/");
+        } else {
+          toast.error("Unexpected response from server.");
+        }
+      },
+      onError: (error) => {
+        toast.error(`Registration failed: ${error.message}`);
+      },
+    },
+  );
+
+  // Handle form submission
+  const onSubmit = (data: FormValuesRegisterPage) => {
+    const { email, password, username } = data;
+    registerMutation({
+      variables: { email, password, name: username },
+    }).finally(() => form.reset());
   };
 
   return (
