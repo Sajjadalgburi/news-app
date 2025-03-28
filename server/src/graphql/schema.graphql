@@ -13,8 +13,6 @@ type Query {
   me: AuthResponse!
   # Query to grab the article analasis from the AI
   getAIAnalysis(content: String!, articleId: ID!): AIResponse!
-  # action to logout the user by removing the cookie
-  logout: AuthResponse!
 }
 
 type Mutation {
@@ -26,6 +24,8 @@ type Mutation {
   saveArticle(input: SaveArticleInput!): AuthResponse!
   # create a comment on an article
   createComment(input: CreateCommentInput!): AuthResponse!
+  # action to logout the user by removing the cookie
+  logout: AuthResponse!
 }
 
 type AIResponse {
@@ -127,6 +127,8 @@ type User {
   email: String!
   # The user's past comments
   comments: [Comment]
+  # The users profile picture
+  profilePicture: String
 }
 
 type AuthResponse {
