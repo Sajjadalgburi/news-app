@@ -165,7 +165,7 @@ export const resolvers: Resolvers = {
 
     me: async (_, __, { user, expressObjects: { req } }) => {
       try {
-        const token = req.cookies.accessToken;
+        const token = req.cookies.accessToken; // Get the token from cookies
 
         if (!token) {
           return {
@@ -185,6 +185,7 @@ export const resolvers: Resolvers = {
           status: 200,
         };
       } catch (error) {
+        console.error("Error validating token:", error);
         return {
           message: "Could not find user",
           status: 500,
