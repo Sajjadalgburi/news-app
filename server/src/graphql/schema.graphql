@@ -13,6 +13,8 @@ type Query {
   me: AuthResponse!
   # Query to grab the article analasis from the AI
   getAIAnalysis(content: String!, articleId: ID!): AIResponse!
+  # action to logout the user by removing the cookie
+  logout: AuthResponse!
 }
 
 type Mutation {
