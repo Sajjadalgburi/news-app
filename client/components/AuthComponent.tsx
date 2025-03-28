@@ -43,7 +43,7 @@ const AuthComponent = ({
   const passwordMatch: boolean = watchConfirmPassword === watchPassword;
 
   return (
-    <section className="flex flex-col w-80 p-4 rounded-xl space-y-4 md:mt-[10rem] shadow-xl justify-center bg-accent max-w-7xl mx-auto">
+    <section className="flex flex-col w-80 p-4 rounded-xl space-y-4 mt-[4rem] md:mt-[10rem] shadow-xl justify-center bg-accent max-w-7xl mx-auto">
       <h1 className="md:text-4xl text-lg font-semibold capitalize text-center">
         {isLoggingIn ? "Login" : "Register"}
       </h1>
@@ -127,9 +127,10 @@ const AuthComponent = ({
           <div className="flex justify-center w-full">
             <Button
               disabled={
-                loading || isLoggingIn
-                  ? watchPassword.length < 6
-                  : !passwordMatch
+                loading ||
+                isLoggingIn ||
+                !form.formState.isValid ||
+                !passwordMatch
               }
               className="w-full cursor-pointer"
               type="submit">
