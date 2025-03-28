@@ -7,7 +7,9 @@
     "start": "next start",
     "lint": "next lint",
     "gen": "graphql-codegen --watch",
-    "dev": "concurrently -n \"CODEGEN,NEXT\" -c \"blue,green\" \"graphql-codegen --watch\" \"next dev --turbopack\""
+    "dev": "concurrently -n \"CODEGEN,NEXT\" -c \"blue,green\" \"graphql-codegen --watch\" \"next dev --turbopack\"",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.13.5",
@@ -39,12 +41,18 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.2.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.2.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
