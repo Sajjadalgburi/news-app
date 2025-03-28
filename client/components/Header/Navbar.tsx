@@ -8,6 +8,7 @@ import AuthGroup from "./AuthGroup";
 import CatagoryTitle from "../CatagoryTitle";
 import useUser from "@/hooks/useUser";
 import UserLoggedIn from "../UserLoggedIn";
+import MobileSheet from "../MobileSheet";
 
 const Navbar = () => {
   const { user } = useUser();
@@ -18,14 +19,14 @@ const Navbar = () => {
         <div className="flex items-center justify-center gap-2">
           {/* todo : Add app logo here */}
           <Link
-            className="capitalize md:text-3xl text-lg font-semibold"
+            className="capitalize md:text-2xl text-lg font-semibold"
             href={"/"}>
             Canadian News
           </Link>
         </div>
 
         {/* Array of Catagories */}
-        <div className="flex gap-2 font-semibold md:text-md">
+        <div className="lg:flex hidden xl:gap-2 font-semibold">
           {categories.map((c) => (
             <CatagoryTitle key={c.name} name={c.name} />
           ))}
@@ -33,7 +34,7 @@ const Navbar = () => {
 
         {/* Desktop */}
         {/* Outmost right hand side */}
-        <div className="flex gap-2 justify-center items-center">
+        <div className="lg:flex hidden gap-2 justify-center items-center">
           <ThemeToggle />
           {user ? (
             // the logout and profile button group
@@ -42,6 +43,10 @@ const Navbar = () => {
             // Render this when user is not logged in
             <AuthGroup />
           )}
+        </div>
+
+        <div className="lg:hidden flex items-center justify-center gap-2">
+          <MobileSheet user={user} />
         </div>
       </nav>
     </header>
