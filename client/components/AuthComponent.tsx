@@ -13,6 +13,7 @@ import {
 import { Input } from "./ui/input";
 import Link from "next/link";
 import { FormValuesRegisterPage } from "@/app/(auth-group)/register/page";
+import { Separator } from "./ui/separator";
 
 interface Props {
   loading: boolean;
@@ -137,7 +138,7 @@ const AuthComponent = ({
               {buttonText}
             </Button>
           </div>
-          <div className="border-b-1" />
+          <Separator />
           <div className="text-center text-sm text-gray-500">
             {isLoggingIn ? (
               <>
