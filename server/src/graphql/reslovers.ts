@@ -194,39 +194,6 @@ export const resolvers: Resolvers = {
         };
       }
     },
-
-    logout: async (_, __, { user, expressObjects: { res } }) => {
-      try {
-        // first we check if the user is logged in, in case they are not, we return an error
-        if (!user) {
-          return {
-            message: "You are not authorized to logout",
-            status: 401,
-            success: false,
-          };
-        }
-
-        // Clear the accessToken cookie
-        res.clearCookie("accessToken", {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
-        });
-
-        // return success response
-        return {
-          message: "Logged out successfully",
-          status: 200,
-          success: true,
-        };
-      } catch (error) {
-        return {
-          success: false,
-          message: "Error in the catch block for logout resolver",
-          status: 500,
-        };
-      }
-    },
   },
 
   Mutation: {
@@ -284,6 +251,7 @@ export const resolvers: Resolvers = {
             id: newUser.id,
             email: newUser.email,
             name: newUser.name,
+            profilePicture: newUser.profilePicture,
           },
           token: token as string,
           success: true,
@@ -356,6 +324,12 @@ export const resolvers: Resolvers = {
           success: true,
           message: "You will be logged in shortly!",
           status: 200,
+          user: {
+            id: userExists.id,
+            email: userExists.email,
+            name: userExists.name,
+            profilePicture: userExists.profilePicture,
+          },
         };
       } catch (error) {
         if (error.name === "ValidationError") {
@@ -507,6 +481,29 @@ export const resolvers: Resolvers = {
         return {
           success: false,
           message: "Could not create comment: " + error.toString(),
+          status: 500,
+        };
+      }
+    },
+    logout: async (_, __, { expressObjects: { res } }) => {
+      try {
+        // Clear the accessToken cookie
+        res.clearCookie("accessToken", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+        });
+
+        // return success response
+        return {
+          message: "Logged out successfully",
+          status: 200,
+          success: true,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Error in the catch block for logout resolver",
           status: 500,
         };
       }
