@@ -22,6 +22,7 @@ const LogoutButton = () => {
 
   return (
     <Button
+      size={"lg"}
       disabled={loading}
       variant="destructive"
       className="cursor-pointer"
