@@ -11,6 +11,7 @@ import "dotenv/config";
 import { ArticlesAPI } from "./api/datasource";
 import { validateJwtToken } from "./utils/jwt";
 import { cleanToken } from "./utils";
+import cookieParser from "cookie-parser";
 
 const PORT = process.env.PORT || 5000;
 
@@ -31,11 +32,12 @@ const startServer = async () => {
   // Ensure we wait for our server to start
   await server.start();
 
+  app.use(cookieParser()); // make sure to use parse the cookies before using them
   app.use(
     cors({
       origin: "http://localhost:3000", // Allow requests from Next.js
       credentials: true, // Allow cookies to be sent
-    }),
+    }), // cors only allows requests from the frontend and not from other domains
   );
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -46,16 +48,12 @@ const startServer = async () => {
      * expressMiddleware accepts the same arguments:
      * an Apollo Server instance and optional configuration options
      */
-
     expressMiddleware(server, {
       context: async ({ req, res }) => {
         const { cache } = server;
         const cookiesToken = req.cookies?.accessToken;
-        let authToken: string | null =
-          req.body.token || req.query.token || req.headers.authorization;
 
-        // If no cookiesToken, return a null user
-        if (!cookiesToken && !authToken) {
+        if (!cookiesToken) {
           return {
             expressObjects: { req, res },
             user: null,
@@ -63,13 +61,7 @@ const startServer = async () => {
           };
         }
 
-        const cleanedToken = cleanToken(authToken);
-
-        // Verify the token and return the user object or null if invalid
-        const userFromCookie = validateJwtToken(cookiesToken);
-        const userFromAuth = validateJwtToken(cleanedToken);
-
-        const user = userFromAuth || userFromCookie;
+        const user = validateJwtToken(cookiesToken);
 
         return {
           expressObjects: { req, res },
