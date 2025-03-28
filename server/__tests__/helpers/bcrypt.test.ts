@@ -62,4 +62,24 @@ describe("bcrypt helper functions", () => {
       expect(res).toBeTruthy();
     });
   });
+
+  it("Should return FALSE if the password does NOT MATCH the hashed password", async () => {
+    // Spy on the actual implementation without mocking
+    const spyOnComparePassword = jest
+      .spyOn(require("../../src/helpers/bcrypt"), "comparePassword")
+      .mockResolvedValueOnce(false);
+
+    const realPassword = "123456";
+    const invalidPassword = "random";
+    const hashedPassword = await hashPassword(realPassword);
+
+    const res: boolean = await comparePassword(invalidPassword, hashedPassword); // Result should be false
+
+    // Ensure the function was called with the correct parameters
+    expect(spyOnComparePassword).toHaveBeenCalledWith(
+      invalidPassword,
+      hashedPassword,
+    );
+    expect(res).toBe(false);
+  });
 });
