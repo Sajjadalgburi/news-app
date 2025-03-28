@@ -16,7 +16,7 @@ import { FormValuesRegisterPage } from "@/app/(auth-group)/register/page";
 
 interface Props {
   loading: boolean;
-  onSubmit: (values: FormValuesRegisterPage) => Promise<void>;
+  onSubmit: (values: FormValuesRegisterPage) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
   isLoggingIn: boolean;
