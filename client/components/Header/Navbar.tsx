@@ -14,7 +14,7 @@ const Navbar = () => {
   const { user } = useUser();
 
   return (
-    <header className="bg-accent rounded-md max-w-[90%] mx-auto shadow-md sticky top-0 z-50">
+    <header className="bg-accent rounded-md  shadow-md sticky top-0 z-50">
       <nav className="flex justify-between items-center p-4 ">
         <div className="flex items-center justify-center gap-2">
           {/* todo : Add app logo here */}
