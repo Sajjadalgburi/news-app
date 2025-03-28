@@ -194,6 +194,39 @@ export const resolvers: Resolvers = {
         };
       }
     },
+
+    logout: async (_, __, { user, expressObjects: { res } }) => {
+      try {
+        // first we check if the user is logged in, in case they are not, we return an error
+        if (!user) {
+          return {
+            message: "You are not authorized to logout",
+            status: 401,
+            success: false,
+          };
+        }
+
+        // Clear the accessToken cookie
+        res.clearCookie("accessToken", {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+        });
+
+        // return success response
+        return {
+          message: "Logged out successfully",
+          status: 200,
+          success: true,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Error in the catch block for logout resolver",
+          status: 500,
+        };
+      }
+    },
   },
 
   Mutation: {
