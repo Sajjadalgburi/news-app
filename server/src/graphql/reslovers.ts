@@ -1,6 +1,6 @@
 import { categoryTypes } from "../types";
 import { Resolvers } from "../types/types"; // ! Note: if you dont see this, run `npm run gen` in ./server directory
-import { createJwtToken } from "../utils/jwt";
+import { createJwtToken, validateJwtToken } from "../utils/jwt";
 import "dotenv/config";
 import { Article, User, Comment } from "../models";
 import { handleValidationErrors } from "../utils";
@@ -163,11 +163,11 @@ export const resolvers: Resolvers = {
       }));
     },
 
-    // Todo: Implement the me query later with mongodb
-    me: async (_, __, { user }) => {
+    me: async (_, __, { user, expressObjects: { req } }) => {
       try {
-        // first check is to see if the user is logged in
-        if (!user) {
+        const token = req.cookies.accessToken;
+
+        if (!token) {
           return {
             message: "You are not logged in",
             status: 401,
@@ -176,26 +176,12 @@ export const resolvers: Resolvers = {
           };
         }
 
-        // find the user in the database
-        const userInDatabase = await User.findById(user.id);
-
-        if (!userInDatabase) {
-          return {
-            message: "User not found",
-            status: 404,
-            success: false,
-            user: null,
-          };
-        }
+        const verifyToken = validateJwtToken(token);
 
         return {
           message: "User found",
           success: true,
-          user: {
-            id: userInDatabase.id,
-            email: userInDatabase.email,
-            name: userInDatabase.name,
-          },
+          user: { ...verifyToken },
           status: 200,
         };
       } catch (error) {
