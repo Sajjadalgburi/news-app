@@ -88,6 +88,8 @@ input CreateCommentInput {
   upvote: Int
   # Number of downvotes the comment has received
   downvote: Int
+  # The date and time that the comment was created, in UTC (+000).
+  createdAt: String
 }
 
 input SourceInput {
@@ -171,4 +173,6 @@ type Comment {
   upvote: Int
   # Number of downvotes the comment has received
   downvote: Int
+  # The date and time that the comment was created, in UTC (+000).
+  createdAt: String
 }
