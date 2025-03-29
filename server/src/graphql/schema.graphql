@@ -26,6 +26,8 @@ type Mutation {
   createComment(input: CreateCommentInput!): AuthResponse!
   # action to logout the user by removing the cookie
   logout: AuthResponse!
+  # Mutation to delete a comment
+  deleteComment(commentId: ID!): AuthResponse!
 }
 
 input CreateCommentInput {
