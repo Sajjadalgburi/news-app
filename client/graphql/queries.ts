@@ -105,7 +105,6 @@ export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
         user {
           id
           name
-          email
           profilePicture
         }
       }
@@ -118,6 +117,7 @@ export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
         worthinessRating
         summarizedContent
         biasRating
+        createdAt
       }
     }
     
