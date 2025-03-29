@@ -129,13 +129,41 @@ export const resolvers: Resolvers = {
           };
         }
 
+        // Fetch all comments for the article and populate user info
+        const populatedComments = await Promise.all(
+          foundArticle.comments.map(async (commentId) => {
+            const comment = await Comment.findById(commentId);
+            if (!comment) return null;
+
+            const commentUser = await User.findById(comment.userId);
+
+            return {
+              id: comment._id.toString(),
+              content: comment.content,
+              createdAt: comment.createdAt,
+              userId: comment.userId,
+              articleId: comment.articleId,
+              user: {
+                id: commentUser._id.toString(),
+                name: commentUser.name,
+                profilePicture: commentUser.profilePicture,
+              },
+            };
+          }),
+        );
+
+        // Filter out any null values (in case a comment was deleted)
+        const filteredComments = populatedComments.filter(
+          (comment) => comment !== null,
+        );
+
         return {
           message: "Article found",
           article: {
-            id: foundArticle.id,
-            ...foundArticle.toObject(),
+            ...foundArticle.toObject(), // Convert Mongoose document to plain object
+            id: foundArticle._id.toString(), // Convert ObjectId to string
+            comments: filteredComments, // Attach populated comments
           },
-
           success: true,
           status: 200,
         };
