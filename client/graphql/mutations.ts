@@ -51,3 +51,23 @@ export const LOGOUT_USER = gql(`
     status
   }
 }`);
+
+export const CREATE_NEW_COMMENT = gql(`
+  mutation CreateCommentMutation($input: CreateCommentInput!) {
+  createComment(input: $input) {
+    success
+    message
+    status
+    article {
+      comments {
+        content
+        id
+        user {
+          id
+          name
+          profilePicture
+        }
+      }
+    }
+  }
+}`);
