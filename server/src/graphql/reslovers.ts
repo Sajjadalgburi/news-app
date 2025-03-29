@@ -542,5 +542,37 @@ export const resolvers: Resolvers = {
         };
       }
     },
+    deleteComment: async (_, { commentId }, { user }) => {
+      try {
+        if (!user) {
+          return {
+            success: false,
+            message: "You must be logged in to delete a comment",
+            status: 401,
+          };
+        }
+
+        const findComment = await Comment.findByIdAndDelete(commentId);
+        if (!findComment) {
+          return {
+            success: false,
+            message: "Comment not found",
+            status: 404,
+          };
+        }
+
+        return {
+          success: true,
+          message: "Comment deleted successfully",
+          status: 200,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Error occured during deleting comment process",
+          status: 500,
+        };
+      }
+    },
   },
 };
