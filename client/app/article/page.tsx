@@ -16,12 +16,13 @@ const ArticlePage = () => {
   });
 
   if (!question) return null;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!data?.getSingleArticle?.article) return <div>No article found.</div>;
 
   return (
     <ArticleComponent
-      article={data?.getSingleArticle.article as Article}
-      loading={loading}
-      error={error}
+      passedArticle={data.getSingleArticle.article as Article}
     />
   );
 };
