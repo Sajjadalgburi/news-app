@@ -28,6 +28,15 @@ type Mutation {
   logout: AuthResponse!
 }
 
+input CreateCommentInput {
+  # ID of the article the comment is associated with
+  articleId: ID!
+  # The text content of the comment
+  content: String!
+  # The user who wrote the comment
+  user: UserInput!
+}
+
 type AIResponse {
   ai: ArtificialIntelligenceType
   status: Int!
