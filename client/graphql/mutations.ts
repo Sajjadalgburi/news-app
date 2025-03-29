@@ -71,3 +71,11 @@ export const CREATE_NEW_COMMENT = gql(`
     }
   }
 }`);
+
+export const DELETE_COMMENT =
+  gql(`mutation DeleteCommentMutation($commentId: ID!) {
+  deleteComment(commentId: $commentId) {
+    success
+    message
+  }
+}`);
