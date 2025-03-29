@@ -428,11 +428,13 @@ export const resolvers: Resolvers = {
         }
 
         // Add logic so user does not comment more than 5 times for the same article
-        const userAlreadyCommented: object[] = await Comment.find({
+        const userAlreadyCommented = await Comment.find({
           userId: user.id,
+          articleId: input.articleId, // Added this line to check comments for this specific article
         });
 
-        if (userAlreadyCommented.length > 6) {
+        if (userAlreadyCommented.length >= 5) {
+          // Changed from 6 to 5 based on the requirement
           return {
             success: false,
             message:
@@ -462,11 +464,43 @@ export const resolvers: Resolvers = {
         foundUser.comments.push(newComment.id);
         await foundUser.save();
 
-        // Return success response
+        // Fetch all comments for the article and populate user info
+        const populatedComments = await Promise.all(
+          article.comments.map(async (commentId) => {
+            const comment = await Comment.findById(commentId);
+            if (!comment) return null;
+
+            const commentUser = await User.findById(comment.userId);
+
+            return {
+              id: comment._id.toString(),
+              content: comment.content,
+              createdAt: comment.createdAt,
+              userId: comment.userId,
+              articleId: comment.articleId,
+              user: {
+                id: commentUser._id.toString(),
+                name: commentUser.name,
+                profilePicture: commentUser.profilePicture,
+              },
+            };
+          }),
+        );
+
+        // Filter out any null values (in case a comment was deleted)
+        const filteredComments = populatedComments.filter(
+          (comment) => comment !== null,
+        );
+
+        // Return success response with properly formatted comments
         return {
           success: true,
           message: "Comment created successfully",
           status: 200,
+          article: {
+            ...article,
+            comments: filteredComments,
+          },
         };
       } catch (error) {
         if (error.name === "ValidationError") {
