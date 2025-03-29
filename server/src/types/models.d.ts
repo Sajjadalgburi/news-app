@@ -23,7 +23,7 @@ export type SourceModel = {
 export type UserModel = {
   id: string;
   name: string;
-  email: string;
+  email?: string;
   comments?: CommentModel[];
 };
 
