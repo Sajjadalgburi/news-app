@@ -98,6 +98,17 @@ export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
         name
         id
       }
+      comments {
+        id
+        articleId
+        content
+        user {
+          id
+          name
+          email
+          profilePicture
+        }
+      }
       url
       description
       content
