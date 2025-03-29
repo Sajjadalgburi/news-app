@@ -100,7 +100,6 @@ export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
       }
       comments {
         id
-        articleId
         content
         user {
           id
