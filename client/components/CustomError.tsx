@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button'
 import React from 'react'
 import { useRouter } from 'next/navigation'
 
-const SingleArticleError = ({ error }: { error: Error | string }) => {
+const CutomError = ({ error }: { error: Error | string }) => {
   const router = useRouter();
 
   return (
@@ -17,4 +17,4 @@ const SingleArticleError = ({ error }: { error: Error | string }) => {
   )
 }
 
-export default SingleArticleError
+export default CutomError
