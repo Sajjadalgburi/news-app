@@ -62,6 +62,7 @@ export const CREATE_NEW_COMMENT = gql(`
       comments {
         content
         id
+        createdAt
         user {
           id
           name

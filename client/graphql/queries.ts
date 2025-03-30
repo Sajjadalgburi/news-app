@@ -101,6 +101,7 @@ export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
       comments {
         id
         content
+        createdAt
         user {
           id
           name
