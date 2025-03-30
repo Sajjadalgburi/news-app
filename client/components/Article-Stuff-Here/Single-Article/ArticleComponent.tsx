@@ -88,13 +88,13 @@ const ArticleComponent = ({ passedArticle }: Props) => {
       onError: (error) => {
         toast.error("Error adding comment: " + error.message);
       },
-    },
+    }
   );
 
   if (!article) return null;
 
-  if (data?.getAIAnalysis.ai === undefined || data?.getAIAnalysis.ai === null)
-    return null;
+  // if (data?.getAIAnalysis.ai === undefined || data?.getAIAnalysis.ai === null)
+  //   return null;
 
   const handleCommentSubmit = async () => {
     if (!commentText.trim()) {
@@ -140,14 +140,15 @@ const ArticleComponent = ({ passedArticle }: Props) => {
           <div className="flex justify-between items-center mt-2">
             <span
               className={`text-sm font-medium ${
-                data.getAIAnalysis.ai.biasRating > 60
+                data.getAIAnalysis.ai && data.getAIAnalysis.ai.biasRating > 60
                   ? "text-red-500"
                   : "text-green-500"
-              }`}>
-              Bias Rating: {data.getAIAnalysis.ai.biasRating}/100
+              }`}
+            >
+              Bias Rating: {data?.getAIAnalysis?.ai?.biasRating}/100
             </span>
             <span className="text-sm font-medium bg-blue-500 text-white px-2 py-1 rounded-md">
-              Worthiness: {data.getAIAnalysis.ai.worthinessRating}/100
+              Worthiness: {data?.getAIAnalysis?.ai?.worthinessRating}/100
             </span>
           </div>
         </div>
@@ -156,18 +157,25 @@ const ArticleComponent = ({ passedArticle }: Props) => {
       )}
 
       <div className="mt-6 text-gray-700 dark:text-gray-300 leading-loose border-t pt-4">
+        {AiAnalysisLoading && <Skeleton className="w-full h-24 bg-gray-200" />}
+
         <p>
-          {showSummary
-            ? data?.getAIAnalysis.ai.summarizedContent
+          {!AiAnalysisError
+            ? showSummary
+              ? data?.getAIAnalysis?.ai?.summarizedContent
+              : article.content
             : article.content}
         </p>
       </div>
 
-      <Button
-        onClick={() => setShowSummary(!showSummary)}
-        className="mt-6 px-6 py-2 bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all">
-        {showSummary ? "Show Full Article" : "Show AI Summary"}
-      </Button>
+      {!AiAnalysisError && !AiAnalysisLoading && (
+        <Button
+          onClick={() => setShowSummary(!showSummary)}
+          className="mt-6 px-6 py-2 bg-blue-600 text-white cursor-pointer font-semibold hover:bg-blue-700 transition-all"
+        >
+          {showSummary ? "Show Full Article" : "Show AI Summary"}
+        </Button>
+      )}
 
       <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
         <span>
@@ -177,7 +185,8 @@ const ArticleComponent = ({ passedArticle }: Props) => {
           href={article.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 hover:underline font-semibold">
+          className="text-blue-600 hover:underline font-semibold"
+        >
           Read Full Article
         </Link>
       </div>
@@ -196,7 +205,8 @@ const ArticleComponent = ({ passedArticle }: Props) => {
           disabled={commentLoading || !user}
           variant="outline"
           onClick={handleCommentSubmit}
-          className="cursor-pointer mt-2">
+          className="cursor-pointer mt-2"
+        >
           {user
             ? commentLoading
               ? "Publishing Comment..."
@@ -206,7 +216,7 @@ const ArticleComponent = ({ passedArticle }: Props) => {
         {articleComments.length > 0 ? (
           <div className="mt-6 gap-3 flex flex-col">
             {articleComments.map((comment) => {
-              return comment && user ? (
+              return comment ? (
                 <CommentCard
                   key={comment.id}
                   data={article}
