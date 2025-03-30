@@ -28,7 +28,7 @@ export const resolvers: Resolvers = {
       }: {
         category: categoryTypes;
       },
-      { dataSources },
+      { dataSources }
     ) => {
       const articles = await dataSources.articlesAPI.getCategory(category);
 
@@ -88,7 +88,7 @@ export const resolvers: Resolvers = {
               summarizedContent: res.summarizedContent, // Fixed typo
             },
           },
-          { new: true, runValidators: true },
+          { new: true, runValidators: true }
         );
 
         if (!updateArticle) {
@@ -149,12 +149,12 @@ export const resolvers: Resolvers = {
                 profilePicture: commentUser.profilePicture,
               },
             };
-          }),
+          })
         );
 
         // Filter out any null values (in case a comment was deleted)
         const filteredComments = populatedComments.filter(
-          (comment) => comment !== null,
+          (comment) => comment !== null
         );
 
         return {
@@ -178,7 +178,7 @@ export const resolvers: Resolvers = {
 
     getArticlesBasedOnSearch: async (_, { question }, { dataSources }) => {
       const articles = await dataSources.articlesAPI.getArticlesBasedOnSearch(
-        question,
+        question
       );
 
       if (!articles) {
@@ -222,11 +222,11 @@ export const resolvers: Resolvers = {
         };
       }
     },
-    getUser: async (_, { userId }, { user }) => {
+    getUser: async (_, { userId }) => {
       try {
         const findUser = await User.findById(userId).populate("comments");
 
-        if (!findUser || !user) {
+        if (!findUser) {
           return null;
         }
 
@@ -263,7 +263,7 @@ export const resolvers: Resolvers = {
     register: async (
       _,
       { email, password, name },
-      { expressObjects: { res } },
+      { expressObjects: { res } }
     ) => {
       try {
         // Before even creating a new user, check if the email is already in use
@@ -547,12 +547,12 @@ export const resolvers: Resolvers = {
                 profilePicture: commentUser.profilePicture,
               },
             };
-          }),
+          })
         );
 
         // Filter out any null values (in case a comment was deleted)
         const filteredComments = populatedComments.filter(
-          (comment) => comment !== null,
+          (comment) => comment !== null
         );
 
         // Return success response with properly formatted comments
