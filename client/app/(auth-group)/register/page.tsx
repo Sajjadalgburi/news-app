@@ -9,6 +9,8 @@ import AuthComponent from "@/components/AuthComponent";
 import { useMutation } from "@apollo/client";
 import { REGISTER_NEW_USER } from "@/graphql/mutations";
 import { useRouter } from "next/navigation";
+import { User } from "@/__generated__/types";
+import  useUser  from "@/hooks/useUser";
 
 // Define Zod Schema
 export const formSchema = z
@@ -48,7 +50,7 @@ const RegisterPage = () => {
       confirmPassword: "",
     },
   });
-
+  const { setUser } = useUser();
   const router = useRouter();
 
   // Define the mutation
@@ -64,13 +66,16 @@ const RegisterPage = () => {
         }
 
         if (status === 200 && success) {
+          setUser(data.register.user as User);
           toast.success(message ?? "Registration successful! Redirecting...");
           router.push("/");
         } else {
+          setUser(null);
           toast.error("Unexpected response from server.");
         }
       },
       onError: (error) => {
+        setUser(null);
         toast.error(`Registration failed: ${error.message}`);
       },
     },
