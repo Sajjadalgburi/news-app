@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 
 const SearchPage = () => {
   const params = useSearchParams();
-  const searchQuery: string = params.get("q") || "";
+  const searchQuery: string = params.get("q") || params.get("name") || "";
 
   const { data, loading, error } = useQuery(GET_ARTICLE_BASED_ON_SEARCH, {
     variables: { question: searchQuery },
