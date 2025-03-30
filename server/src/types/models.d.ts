@@ -34,4 +34,5 @@ export type CommentModel = {
   userId: string | Schema.Types.ObjectId;
   upvotes?: number;
   downvotes?: number;
+  createdAt?: Date;
 };
