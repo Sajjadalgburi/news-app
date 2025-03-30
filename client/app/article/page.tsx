@@ -7,6 +7,7 @@ import { GET_SINGLE_ARTICLE } from "@/graphql/queries";
 import ArticleComponent from "@/components/Article-Stuff-Here/Single-Article/ArticleComponent";
 import { Article } from "@/__generated__/types";
 import SingleArticleLoading from '@/components/Article-Stuff-Here/Single-Article/SingleArticleLoading';
+import SingleArticleError from '@/components/Article-Stuff-Here/Single-Article/SingleArticleError';
 
 const ArticlePage = () => {
   const params = useSearchParams();
@@ -19,8 +20,8 @@ const ArticlePage = () => {
 
   if (!question) return null;
   if (loading) return <SingleArticleLoading />;
-  if (error) return <div>Error: {error.message}</div>;
-  if (!data?.getSingleArticle?.article) return <div>No article found.</div>;
+  if (error) return <SingleArticleError error={error} />;
+  if (!data?.getSingleArticle?.article) return <SingleArticleError error={"No article found."} />;
 
   return (
     <ArticleComponent
