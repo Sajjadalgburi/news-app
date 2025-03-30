@@ -1,7 +1,7 @@
+import "dotenv/config";
 import { categoryTypes } from "../types";
 import { Resolvers } from "../types/types"; // ! Note: if you dont see this, run `npm run gen` in ./server directory
 import { createJwtToken, validateJwtToken } from "../utils/jwt";
-import "dotenv/config";
 import { Article, User, Comment } from "../models";
 import { handleValidationErrors } from "../utils";
 import analyzeArticle from "../api/openai";
@@ -220,6 +220,41 @@ export const resolvers: Resolvers = {
           success: false,
           user: null,
         };
+      }
+    },
+    getUser: async (_, { userId }, { user }) => {
+      try {
+        const findUser = await User.findById(userId).populate("comments");
+
+        if (!findUser || !user) {
+          return null;
+        }
+
+        const foundUserToComment = findUser.comments.map((comment) => {
+          return {
+            id: comment.id.toString(),
+            articleId: comment.articleId,
+            content: comment.content,
+            createdAt: comment.createdAt,
+            userId: comment.userId,
+            user: {
+              id: findUser._id.toString(),
+              name: findUser.name,
+              email: findUser.email,
+              profilePicture: findUser.profilePicture,
+            },
+          };
+        });
+
+        return {
+          id: findUser._id.toString(),
+          name: findUser.name,
+          email: findUser.email,
+          profilePicture: findUser.profilePicture,
+          comments: [...foundUserToComment],
+        };
+      } catch (error) {
+        return null;
       }
     },
   },
@@ -602,5 +637,51 @@ export const resolvers: Resolvers = {
         };
       }
     },
+
+    // todo: this is just a small feature, we can add it later;
+    // upvoteComment: async (_, { commentId }, { user }) => {
+    //   try {
+    //     if (!user) {
+    //       return {
+    //         success: false,
+    //         message: "You must be logged in to upvote a comment",
+    //         status: 401,
+    //       };
+    //     }
+
+    //     const findComment = await Comment.findOne({ _id: commentId });
+
+    //     if (user.id === findComment.userId) {
+    //       return {
+    //         success: false,
+    //         message: "You Cannot upvote your own comment",
+    //         status: 401,
+    //       };
+    //     }
+
+    //     await Comment.findOneAndUpdate(
+    //       { _id: commentId },
+    //       {
+    //         $inc: { upvotes: 1 },
+    //       },
+    //       {
+    //         new: true,
+    //         runValidators: true,
+    //       },
+    //     );
+
+    //     return {
+    //       success: true,
+    //       message: "Comment upvoted!",
+    //       status: 200,
+    //     };
+    //   } catch (error) {
+    //     return {
+    //       success: false,
+    //       message: "Error occured during upvoting comment process",
+    //       status: 500,
+    //     };
+    //   }
+    // },
   },
 };
