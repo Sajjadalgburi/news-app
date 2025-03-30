@@ -7,12 +7,12 @@ import { Article } from "@/__generated__/graphql";
 
 interface Props {
   commentId: string;
+  setData: Dispatch<SetStateAction<Article>>;
+  data: Article;
   className?: string;
-  setArticle: Dispatch<SetStateAction<Article>>;
-  article: Article;
 }
 
-const DeleteButton = ({ className, commentId, article, setArticle }: Props) => {
+const DeleteButton = ({ className, commentId, data, setData }: Props) => {
   const [deleteComment, { loading: deleteLoading }] = useMutation(
     DELETE_COMMENT,
     {
@@ -29,19 +29,19 @@ const DeleteButton = ({ className, commentId, article, setArticle }: Props) => {
     },
   );
 
-  const comments = article?.comments || [];
+  const comments = data?.comments || [];
 
   if (!comments) return null;
 
   const handleDeleteComment = () => {
-    if (article) {
+    if (data) {
       const updatedComments = comments.filter(
         (comment) => comment && comment.id !== commentId,
       );
 
       const existingComments = comments || [];
 
-      setArticle((prev) => {
+      setData((prev) => {
         return {
           ...prev,
           comments: updatedComments || existingComments,
