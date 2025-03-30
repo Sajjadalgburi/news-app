@@ -6,6 +6,7 @@ import { useQuery } from "@apollo/client";
 import { GET_SINGLE_ARTICLE } from "@/graphql/queries";
 import ArticleComponent from "@/components/Article-Stuff-Here/Single-Article/ArticleComponent";
 import { Article } from "@/__generated__/types";
+import SingleArticleLoading from '@/components/Article-Stuff-Here/Single-Article/SingleArticleLoading';
 
 const ArticlePage = () => {
   const params = useSearchParams();
@@ -15,8 +16,9 @@ const ArticlePage = () => {
     variables: { input: question },
   });
 
+
   if (!question) return null;
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <SingleArticleLoading />;
   if (error) return <div>Error: {error.message}</div>;
   if (!data?.getSingleArticle?.article) return <div>No article found.</div>;
 
