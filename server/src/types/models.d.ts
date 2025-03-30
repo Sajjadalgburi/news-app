@@ -32,6 +32,6 @@ export type CommentModel = {
   articleId: Schema.Types.ObjectId; // the Id of the article
   content: string;
   userId: string | Schema.Types.ObjectId;
-  upvote?: number;
-  downvote?: number;
+  upvotes?: number;
+  downvotes?: number;
 };

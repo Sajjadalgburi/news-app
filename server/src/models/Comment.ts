@@ -18,8 +18,8 @@ const commentSchema: Schema<CommentDocument> = new Schema({
     type: Schema.Types.ObjectId,
     required: [true, "Please provide the userId who created this comment"],
   }, // the user who made this comment
-  upvote: { type: Number, default: 0 },
-  downvote: { type: Number, default: 0 },
+  upvotes: { type: Number, default: 0 }, // todo: we can make this into it's own model
+  downvotes: { type: Number, default: 0 }, // todo: as well as this. read above
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
