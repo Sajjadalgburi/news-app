@@ -36,7 +36,12 @@ const userSchema: Schema<UserDocument> = new Schema({
     required: [true, "Password is required"],
     minlength: [6, "Password must be at least 6 characters long"],
   },
-  comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Comment",
+    },
+  ],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
