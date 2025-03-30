@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import DeleteButton from "./DeleteButton";
 import { formatDate } from "@/helpers";
+import Link from "next/link";
 
 interface Props {
   comment: Comment;
@@ -32,7 +33,12 @@ const CommentCard = ({ comment, user, data, setData }: Props) => {
             className="rounded-full border border-gray-700"
           />
           <div>
-            <p className="font-semibold">{commentUser.name || "Anonymous"}</p>
+            <Link
+              href={`/profile?id=${comment.user?.id}`}
+              className="font-semibold hover:underline "
+            >
+              {commentUser.name || "Anonymous"}
+            </Link>
             <p className="text-xs text-gray-400">
               {comment.createdAt
                 ? formatDate(comment.createdAt)
