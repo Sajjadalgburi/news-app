@@ -1,4 +1,5 @@
 # refer to https://newsapi.org/docs/endpoints/top-headlines for types from the API doc
+scalar Date
 
 type Query {
   # This query is for showcasing the hottest trends on the homepage
@@ -13,6 +14,8 @@ type Query {
   me: AuthResponse!
   # Query to grab the article analasis from the AI
   getAIAnalysis(content: String!, articleId: ID!): AIResponse!
+  # Query to grab a speicific user from the database
+  getUser(userId: ID!): User
 }
 
 type Mutation {
@@ -28,6 +31,8 @@ type Mutation {
   logout: AuthResponse!
   # Mutation to delete a comment
   deleteComment(commentId: ID!): AuthResponse!
+  # Mutation to upvote a comment
+  upvoteComment(commentId: ID!): AuthResponse!
 }
 
 input CreateCommentInput {
@@ -36,7 +41,7 @@ input CreateCommentInput {
   # The text content of the comment
   content: String!
   # The user who wrote the comment
-  user: UserInput!
+  user: UserInput
 }
 
 type AIResponse {
@@ -168,11 +173,11 @@ type Comment {
   # The text content of the comment
   content: String!
   # The user who wrote the comment
-  user: User!
+  user: User
   # Number of upvotes the comment has received
-  upvote: Int
+  upvotes: Int
   # Number of downvotes the comment has received
-  downvote: Int
+  downvotes: Int
   # The date and time that the comment was created, in UTC (+000).
-  createdAt: String
+  createdAt: Date
 }
