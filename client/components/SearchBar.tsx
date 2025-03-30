@@ -7,8 +7,9 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { debounce } from "lodash";
+import { usePathname } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(3, "Minimum of 3 characters").nonempty(),
@@ -25,19 +26,46 @@ export function SearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") || "");
+  const pathname = usePathname();
 
-  // Debounced function to update URL
-  const updateQuery = debounce((value: string) => {
-    if (value.trim().length > 2) {
-      router.replace(`/search?q=${encodeURIComponent(value)}`);
-    } else {
-      router.replace(`/`); // Reset to homepage if query is empty
-    }
-  }, 500); // 500ms delay to debounce
+  // these are the routes that should be skipped when searching, because the normal
+  // behavior always resets to the '/search' route if there is an input or the homepage when the search is empty
+  const skipTheseRoutes = useMemo(() => {
+    const skipPages = [
+      "/login",
+      "/register",
+      "/profile",
+      "/article",
+      "/category",
+      "/testing",
+    ];
+    return skipPages.some((page) => {
+      const regex = new RegExp(`^${page}(/|$)`);
+      return regex.test(pathname);
+    });
+  }, [pathname]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const updateQuery = useCallback(
+    debounce((value: string) => {
+      if (skipTheseRoutes) {
+        setQuery(""); // Reset query when on skipped pages
+        router.replace(`/search?q=${encodeURIComponent(value)}`);
+      }
+
+      if (value.trim().length === 0) {
+        router.replace(`/`);
+      } else if (value.trim().length > 2) {
+        setQuery(""); // Reset query when on skipped pages
+        router.replace(`/search?q=${encodeURIComponent(value)}`);
+      }
+    }, 1000),
+    [skipTheseRoutes]
+  );
 
   useEffect(() => {
-    updateQuery(query);
-    return () => updateQuery.cancel(); // Cleanup debounce on unmount
+    if (query) updateQuery(query);
+    return () => updateQuery.cancel();
   }, [query, updateQuery]);
 
   return (
@@ -56,8 +84,8 @@ export function SearchBar() {
                     {...field}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search for any news"
-                    className="col-span-3 capitalize"
+                    placeholder="Search for news using keywords, topics, or names"
+                    className="col-span-3"
                   />
                 </FormControl>
                 <FormMessage />
