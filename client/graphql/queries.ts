@@ -137,3 +137,26 @@ export const GET_ARTICLE_AI_ANALYSIS = gql(`
     }
   }
 }`);
+
+export const GET_SINGLE_USER = gql(`query GetSingleUserQuery($userId: ID!) {
+  getUser(userId: $userId) {
+    id
+    name
+    email
+    profilePicture
+    comments {
+      id
+      articleId
+      content
+      upvotes
+      downvotes
+      createdAt
+      user {
+        id
+        name
+        email
+        profilePicture
+      }
+    }
+  }
+}`);
