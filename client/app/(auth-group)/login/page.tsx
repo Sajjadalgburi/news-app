@@ -51,6 +51,7 @@ const LoginPage = () => {
         toast.success("Login successful! Redirecting...");
         router.push("/");
       } else {
+        setUser(null);
         toast.error("Unexpected response from server.");
       }
     },
