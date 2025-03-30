@@ -110,7 +110,7 @@ const AuthComponent = ({
                   </FormControl>
                   <span className="text-left text-sm line-clamp-1">
                     {watchPassword.length > 5 &&
-                    watchConfirmPassword?.length > 1 ? (
+                    watchConfirmPassword?.length > 5 ? (
                       !passwordMatch ? (
                         <p className="text-red-500">Passwords do not match</p>
                       ) : (
@@ -129,12 +129,12 @@ const AuthComponent = ({
             <Button
               disabled={
                 loading ||
-                isLoggingIn ||
                 !form.formState.isValid ||
-                !passwordMatch
+                (!isLoggingIn && !passwordMatch)
               }
               className="w-full cursor-pointer"
-              type="submit">
+              type="submit"
+            >
               {buttonText}
             </Button>
           </div>
