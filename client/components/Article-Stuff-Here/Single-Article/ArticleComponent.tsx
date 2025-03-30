@@ -119,14 +119,14 @@ const ArticleComponent = ({ passedArticle }: Props) => {
   const articleComments = article?.comments || [];
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white shadow-xl rounded-lg transition-all duration-300">
+    <div className="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-800 shadow-xl rounded-lg transition-all duration-300">
       {article.image && (
         <div className="relative w-full h-80 mb-4 rounded-lg overflow-hidden shadow-md">
           <RenderImage image={article.image} alt={article.title} />
         </div>
       )}
 
-      <h1 className="text-3xl font-extrabold text-gray-900 leading-tight">
+      <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
         {article.title}
       </h1>
       <div className="text-gray-500 text-sm mt-2">
@@ -135,7 +135,7 @@ const ArticleComponent = ({ passedArticle }: Props) => {
       </div>
 
       {data && article && !AiAnalysisLoading && !AiAnalysisError ? (
-        <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-sm">
+        <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-300 rounded-lg shadow-sm">
           <p className="text-gray-700 font-semibold">AI Analysis</p>
           <div className="flex justify-between items-center mt-2">
             <span
@@ -155,7 +155,7 @@ const ArticleComponent = ({ passedArticle }: Props) => {
         <Skeleton className="mt-4 w-full h-24 bg-gray-200 rounded-lg" />
       )}
 
-      <div className="mt-6 text-gray-800 leading-loose border-t pt-4">
+      <div className="mt-6 text-gray-700 dark:text-gray-300 leading-loose border-t pt-4">
         <p>
           {showSummary
             ? data?.getAIAnalysis.ai.summarizedContent
@@ -209,8 +209,8 @@ const ArticleComponent = ({ passedArticle }: Props) => {
               return comment && user ? (
                 <CommentCard
                   key={comment.id}
-                  article={article}
-                  setArticle={
+                  data={article}
+                  setData={
                     setArticle as React.Dispatch<React.SetStateAction<Article>>
                   }
                   user={user}
