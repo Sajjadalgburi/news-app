@@ -44,15 +44,15 @@ const ArticleCard: React.FC<Props> = ({
       role="button"
       aria-disabled={loading}
       onClick={handleClick}
-      className="block overflow-hidden hover:cursor-pointer rounded-xl min-h-fit mx-auto self-center shadow-md transition-transform transform hover:scale-102 hover:underline hover:shadow-lg">
+      className="block overflow-hidden hover:cursor-pointer rounded-xl min-h-fit mx-auto self-center shadow-md transition-transform transform hover:scale-102 hover:underline hover:shadow-lg bg-white dark:bg-gray-800">
       {image && article.image && (
         <div className={`relative w-full ${isFeatured ? "h-96" : "h-48"}`}>
           <RenderImage image={article.image!} alt={article.title} />
         </div>
       )}
-      <div className="flex  flex-col h-full p-4 bg-white ">
+      <div className="flex flex-col h-full p-4 bg-white dark:bg-gray-800">
         <div className="">
-          <h2 className="text-lg font-semibold text-gray-900 line-clamp-2">
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2">
             {article.title}
           </h2>
         </div>
@@ -61,12 +61,12 @@ const ArticleCard: React.FC<Props> = ({
           <p
             className={`${
               isFeatured ? "text-md" : "text-xs"
-            } text-gray-700 line-clamp-3 text-wrap`}>
+            } text-gray-700 dark:text-gray-300 line-clamp-3 text-wrap`}>
             {article.description}
           </p>
         )}
 
-        <div className="flex items-center justify-between text-xs text-gray-500 mt-2">
+        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
           <span className="font-medium capitalize">
             By: {article.author ? article.author : "anonymous"}
           </span>
