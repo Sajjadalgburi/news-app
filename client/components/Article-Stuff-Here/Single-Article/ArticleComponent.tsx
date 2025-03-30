@@ -68,6 +68,7 @@ const ArticleComponent = ({ passedArticle }: Props) => {
                 articleId: article?.id ?? "",
                 content: comment?.content ?? "",
                 id: comment?.id ?? "",
+                createdAt: comment?.createdAt ?? "",
                 user: {
                   id: comment?.user?.id ?? "",
                   profilePicture: comment?.user?.profilePicture ?? "",
@@ -203,7 +204,7 @@ const ArticleComponent = ({ passedArticle }: Props) => {
             : "Login to Add Comment"}
         </Button>
         {articleComments.length > 0 ? (
-          <div className="mt-6">
+          <div className="mt-6 gap-3 flex flex-col">
             {articleComments.map((comment) => {
               return comment && user ? (
                 <CommentCard
