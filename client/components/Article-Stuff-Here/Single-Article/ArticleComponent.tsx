@@ -88,13 +88,10 @@ const ArticleComponent = ({ passedArticle }: Props) => {
       onError: (error) => {
         toast.error("Error adding comment: " + error.message);
       },
-    }
+    },
   );
 
   if (!article) return null;
-
-  // if (data?.getAIAnalysis.ai === undefined || data?.getAIAnalysis.ai === null)
-  //   return null;
 
   const handleCommentSubmit = async () => {
     if (!commentText.trim()) {
@@ -119,121 +116,141 @@ const ArticleComponent = ({ passedArticle }: Props) => {
   const articleComments = article?.comments || [];
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white dark:bg-gray-800 shadow-xl rounded-lg transition-all duration-300">
-      {article.image && (
-        <div className="relative w-full h-80 mb-4 rounded-lg overflow-hidden shadow-md">
-          <RenderImage image={article.image} alt={article.title} />
-        </div>
-      )}
+    <section className="flex flex-col max-w-7xl lg:mx-auto lg:px-0 px-10 w-full lg:flex-row mt-10 justify-center items-center gap-4">
+      <div className=" max-h-full overflow-hidden p-6 bg-white dark:bg-gray-800 shadow-xl rounded-lg transition-all duration-300">
+        {/* The actual article section on the left */}
+        <div className="overflow-auto lg:mx-0 mx-auto">
+          {article.image && (
+            <div className="relative w-full h-80 mb-4 rounded-lg overflow-hidden shadow-md">
+              <RenderImage image={article.image} alt={article.title} />
+            </div>
+          )}
 
-      <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
-        {article.title}
-      </h1>
-      <div className="text-gray-500 text-sm mt-2">
-        By <span className="font-semibold">{article.author || "Unknown"}</span>{" "}
-        | {new Date(article.publishedAt).toLocaleDateString()}
-      </div>
+          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
+            {article.title}
+          </h1>
+          <div className="text-gray-500 text-sm mt-2">
+            By{" "}
+            <span className="font-semibold">{article.author || "Unknown"}</span>{" "}
+            | {new Date(article.publishedAt).toLocaleDateString()}
+          </div>
 
-      {data && article && !AiAnalysisLoading && !AiAnalysisError ? (
-        <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-300 rounded-lg shadow-sm">
-          <p className="text-gray-700 font-semibold">AI Analysis</p>
-          <div className="flex justify-between items-center mt-2">
-            <span
-              className={`text-sm font-medium ${
-                data.getAIAnalysis.ai && data.getAIAnalysis.ai.biasRating > 60
-                  ? "text-red-500"
-                  : "text-green-500"
-              }`}
-            >
-              Bias Rating: {data?.getAIAnalysis?.ai?.biasRating}/100
+          {data && article && !AiAnalysisLoading && !AiAnalysisError ? (
+            <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-300 rounded-lg shadow-sm">
+              <p className="text-gray-700 font-semibold">AI Analysis</p>
+              <div className="flex justify-between items-center mt-2">
+                <span
+                  className={`text-sm font-medium ${
+                    data.getAIAnalysis.ai &&
+                    data.getAIAnalysis.ai.biasRating > 60
+                      ? "text-red-500"
+                      : "text-green-500"
+                  }`}>
+                  Bias Rating: {data?.getAIAnalysis?.ai?.biasRating}/100
+                </span>
+                <span className="text-sm font-medium bg-blue-500 text-white px-2 py-1 rounded-md">
+                  Worthiness: {data?.getAIAnalysis?.ai?.worthinessRating}/100
+                </span>
+              </div>
+              <p>
+                <strong>Bias Reasoning:</strong>{" "}
+                {data?.getAIAnalysis?.ai?.biasReasoning}
+              </p>
+            </div>
+          ) : (
+            <Skeleton className="mt-4 w-full h-24 bg-gray-200 rounded-lg" />
+          )}
+
+          <div className="mt-6 text-gray-700 dark:text-gray-300 leading-loose border-t pt-4">
+            {AiAnalysisLoading && (
+              <Skeleton className="w-full h-24 bg-gray-200" />
+            )}
+
+            <p>
+              {!AiAnalysisError
+                ? showSummary
+                  ? data?.getAIAnalysis?.ai?.summarizedContent
+                  : article.content
+                : article.content}
+            </p>
+          </div>
+
+          {!AiAnalysisError && !AiAnalysisLoading && (
+            <Button
+              onClick={() => setShowSummary(!showSummary)}
+              className="mt-6 px-6 py-2 bg-blue-600 text-white cursor-pointer font-semibold hover:bg-blue-700 transition-all">
+              {showSummary ? "Show Full Article" : "Show AI Summary"}
+            </Button>
+          )}
+
+          <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
+            <span>
+              Source: <strong>{article.source.name}</strong>
             </span>
-            <span className="text-sm font-medium bg-blue-500 text-white px-2 py-1 rounded-md">
-              Worthiness: {data?.getAIAnalysis?.ai?.worthinessRating}/100
-            </span>
+            <Link
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline font-semibold">
+              Read Full Article
+            </Link>
+          </div>
+
+          <div className="mt-8">
+            <h2 className="text-xl font-bold">Comments</h2>
+
+            <textarea
+              className="w-full resize-none mt-4 p-2 border border-gray-300 rounded-md"
+              placeholder="Write your comment..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+            />
+
+            <Button
+              disabled={commentLoading || !user}
+              variant="outline"
+              onClick={handleCommentSubmit}
+              className="cursor-pointer mt-2">
+              {user
+                ? commentLoading
+                  ? "Publishing Comment..."
+                  : "Create Comment"
+                : "Login to Add Comment"}
+            </Button>
+            {articleComments.length > 0 ? (
+              <div className="mt-6 gap-3 flex flex-col">
+                {articleComments.map((comment) => {
+                  return comment ? (
+                    <CommentCard
+                      key={comment.id}
+                      data={article}
+                      setData={
+                        setArticle as React.Dispatch<
+                          React.SetStateAction<Article>
+                        >
+                      }
+                      user={user}
+                      comment={comment}
+                    />
+                  ) : null;
+                })}
+              </div>
+            ) : (
+              <p className="text-gray-500 my-3">
+                No comments yet. Be the first!
+              </p>
+            )}
           </div>
         </div>
-      ) : (
-        <Skeleton className="mt-4 w-full h-24 bg-gray-200 rounded-lg" />
-      )}
-
-      <div className="mt-6 text-gray-700 dark:text-gray-300 leading-loose border-t pt-4">
-        {AiAnalysisLoading && <Skeleton className="w-full h-24 bg-gray-200" />}
-
-        <p>
-          {!AiAnalysisError
-            ? showSummary
-              ? data?.getAIAnalysis?.ai?.summarizedContent
-              : article.content
-            : article.content}
-        </p>
       </div>
-
-      {!AiAnalysisError && !AiAnalysisLoading && (
-        <Button
-          onClick={() => setShowSummary(!showSummary)}
-          className="mt-6 px-6 py-2 bg-blue-600 text-white cursor-pointer font-semibold hover:bg-blue-700 transition-all"
-        >
-          {showSummary ? "Show Full Article" : "Show AI Summary"}
-        </Button>
-      )}
-
-      <div className="mt-6 flex justify-between items-center text-sm text-gray-500">
-        <span>
-          Source: <strong>{article.source.name}</strong>
-        </span>
-        <Link
-          href={article.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:underline font-semibold"
-        >
-          Read Full Article
-        </Link>
+      {/* The comments of the article aligned to the top right side */}
+      <div className="bg-blue-200 w-full lg:w-1/3 h-[300px] rounded-xl shadow-md flex flex-col justify-center  gap-4 p-4">
+        <div className="w-[300px] h-[300px] rounded-xl bg-red-100" />
+        <div className="w-[300px] h-[300px] rounded-xl bg-red-100" />
+        <div className="w-[300px] h-[300px] rounded-xl bg-red-100" />
+        <div className="w-[300px] h-[300px] rounded-xl bg-red-100" />
       </div>
-
-      <div className="mt-8">
-        <h2 className="text-xl font-bold">Comments</h2>
-
-        <textarea
-          className="w-full resize-none mt-4 p-2 border border-gray-300 rounded-md"
-          placeholder="Write your comment..."
-          value={commentText}
-          onChange={(e) => setCommentText(e.target.value)}
-        />
-
-        <Button
-          disabled={commentLoading || !user}
-          variant="outline"
-          onClick={handleCommentSubmit}
-          className="cursor-pointer mt-2"
-        >
-          {user
-            ? commentLoading
-              ? "Publishing Comment..."
-              : "Create Comment"
-            : "Login to Add Comment"}
-        </Button>
-        {articleComments.length > 0 ? (
-          <div className="mt-6 gap-3 flex flex-col">
-            {articleComments.map((comment) => {
-              return comment ? (
-                <CommentCard
-                  key={comment.id}
-                  data={article}
-                  setData={
-                    setArticle as React.Dispatch<React.SetStateAction<Article>>
-                  }
-                  user={user}
-                  comment={comment}
-                />
-              ) : null;
-            })}
-          </div>
-        ) : (
-          <p className="text-gray-500 my-3">No comments yet. Be the first!</p>
-        )}
-      </div>
-    </div>
+    </section>
   );
 };
 
