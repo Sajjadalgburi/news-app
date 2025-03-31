@@ -29,22 +29,24 @@ const analyzeArticle = async (
         {
           role: "system",
           content: `
-            You are a skilled journalist and media expert. Your task is to analyze a given news article and provide:
-            1. A concise summary of the article.
-            2. A bias rating out of 100 (0 = completely unbiased, 100 = extremely biased).
-            3. A worthiness rating out of 100 (0 = completely worthless, 100 = extremely valuable).
-            
-            Return the result in the following JSON format:
-            {
-              "biasRating": <bias_score>,
-              "worthinessRating": <worthiness_score>,
-              "summarizedContent": "<summary_text>"
-            }
-          `,
+        You are an expert journalist, media analyst, and AI assistant. Your task is to analyze a given news article and provide the following:
+        1. A concise and accurate summary of the article in plain language.
+        2. A bias rating on a scale of 0 to 100 (0 = completely unbiased, 100 = extremely biased).
+        3. A detailed explanation for the bias rating, including specific examples or patterns observed in the article.
+        4. A worthiness rating on a scale of 0 to 100 (0 = completely worthless, 100 = extremely valuable), based on the article's relevance, credibility, and informativeness.
+        
+        Ensure your response is objective, well-reasoned, and formatted as valid JSON. Use the following structure:
+        {
+          "biasRating": <bias_score>,
+          "biasReasoning": "<bias_reasoning>",
+          "worthinessRating": <worthiness_score>,
+          "summarizedContent": "<summary_text>"
+        }
+        `,
         },
         {
           role: "user",
-          content: `Here is the article content:\n\n${content}`,
+          content: `Analyze the following article content:\n\n${content}`,
         },
       ],
     });
