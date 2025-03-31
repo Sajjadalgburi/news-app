@@ -1,9 +1,17 @@
 import React from "react";
 import { Article } from "@/__generated__/graphql";
-import { formatDate } from "@/helpers";
+import { formatDate, formatString } from "@/helpers";
 import useSaveArticle from "@/helpers/saveArticle";
 import { useRouter } from "next/navigation";
 import RenderImage from "../RenderImage";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
 
 interface Props {
   article: Article;
@@ -40,40 +48,39 @@ const ArticleCard: React.FC<Props> = ({
   };
 
   return (
-    <a
-      role="button"
-      aria-disabled={loading}
-      onClick={handleClick}
-      className="block overflow-hidden hover:cursor-pointer rounded-xl min-h-fit mx-auto self-center shadow-md transition-transform transform hover:scale-102 hover:underline hover:shadow-lg bg-white dark:bg-gray-800">
-      {image && article.image && (
-        <div className={`relative w-full ${isFeatured ? "h-96" : "h-48"}`}>
-          <RenderImage image={article.image!} alt={article.title} />
-        </div>
-      )}
-      <div className="flex flex-col h-full p-4 bg-white dark:bg-gray-800">
-        <div className="">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 line-clamp-2">
-            {article.title}
-          </h2>
-        </div>
+    <>
+      <Card className="block hover:shadow-lg hover:cursor-pointer hover:scale-[1.05] hover:underline transition-all duration-500 ease-in-out rounded-lg overflow-hidden">
+        <a role="button" aria-disabled={loading} onClick={handleClick}>
+          <CardHeader>
+            {image && article.image && (
+              <div
+                className={`relative w-full ${isFeatured ? "h-96" : "h-48"}`}>
+                <RenderImage image={article.image!} alt={article.title} />
+              </div>
+            )}{" "}
+            <CardTitle> {article.title}</CardTitle>
+            <CardDescription></CardDescription>
+          </CardHeader>
+          {hasImage !== true && (
+            <CardContent>
+              <p
+                className={`${
+                  isFeatured ? "text-md" : "text-xs"
+                }  line-clamp-3 text-wrap`}>
+                {article.description}
+              </p>
+            </CardContent>
+          )}
 
-        {hasImage !== true && (
-          <p
-            className={`${
-              isFeatured ? "text-md" : "text-xs"
-            } text-gray-700 dark:text-gray-300 line-clamp-3 text-wrap`}>
-            {article.description}
-          </p>
-        )}
-
-        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
-          <span className="font-medium capitalize">
-            By: {article.author ? article.author : "anonymous"}
-          </span>
-          <span>{formatDate(article.publishedAt)}</span>
-        </div>
-      </div>
-    </a>
+          <CardFooter className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
+            <span className="font-medium capitalize">
+              By: {article.author ? formatString(article.author) : "anonymous"}
+            </span>
+            <span>{formatDate(article.publishedAt)}</span>
+          </CardFooter>
+        </a>
+      </Card>
+    </>
   );
 };
 
