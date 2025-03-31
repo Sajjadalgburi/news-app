@@ -28,7 +28,7 @@ export const resolvers: Resolvers = {
       }: {
         category: categoryTypes;
       },
-      { dataSources }
+      { dataSources },
     ) => {
       const articles = await dataSources.articlesAPI.getCategory(category);
 
@@ -84,11 +84,12 @@ export const resolvers: Resolvers = {
           {
             ai: {
               biasRating: res.biasRating,
+              biasReasoning: res.biasReasoning,
               worthinessRating: res.worthinessRating,
               summarizedContent: res.summarizedContent, // Fixed typo
             },
           },
-          { new: true, runValidators: true }
+          { new: true, runValidators: true },
         );
 
         if (!updateArticle) {
@@ -149,12 +150,12 @@ export const resolvers: Resolvers = {
                 profilePicture: commentUser.profilePicture,
               },
             };
-          })
+          }),
         );
 
         // Filter out any null values (in case a comment was deleted)
         const filteredComments = populatedComments.filter(
-          (comment) => comment !== null
+          (comment) => comment !== null,
         );
 
         return {
@@ -162,6 +163,7 @@ export const resolvers: Resolvers = {
           article: {
             ...foundArticle.toObject(), // Convert Mongoose document to plain object
             id: foundArticle._id.toString(), // Convert ObjectId to string
+            _id: undefined, // Remove the original _id field
             comments: filteredComments, // Attach populated comments
           },
           success: true,
@@ -169,7 +171,9 @@ export const resolvers: Resolvers = {
         };
       } catch (error) {
         return {
-          message: "Could not find article",
+          message: Array.isArray(error)
+            ? error.map((err) => err.message)
+            : error.toString(),
           success: false,
           status: 500,
         };
@@ -178,7 +182,7 @@ export const resolvers: Resolvers = {
 
     getArticlesBasedOnSearch: async (_, { question }, { dataSources }) => {
       const articles = await dataSources.articlesAPI.getArticlesBasedOnSearch(
-        question
+        question,
       );
 
       if (!articles) {
@@ -263,7 +267,7 @@ export const resolvers: Resolvers = {
     register: async (
       _,
       { email, password, name },
-      { expressObjects: { res } }
+      { expressObjects: { res } },
     ) => {
       try {
         // Before even creating a new user, check if the email is already in use
@@ -547,12 +551,12 @@ export const resolvers: Resolvers = {
                 profilePicture: commentUser.profilePicture,
               },
             };
-          })
+          }),
         );
 
         // Filter out any null values (in case a comment was deleted)
         const filteredComments = populatedComments.filter(
-          (comment) => comment !== null
+          (comment) => comment !== null,
         );
 
         // Return success response with properly formatted comments

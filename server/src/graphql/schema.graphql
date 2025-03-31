@@ -54,6 +54,7 @@ type AIResponse {
 type ArtificialIntelligenceType {
   biasRating: Int!
   summarizedContent: String!
+  biasReasoning: String!
   worthinessRating: Int!
   createdAt: String
 }
