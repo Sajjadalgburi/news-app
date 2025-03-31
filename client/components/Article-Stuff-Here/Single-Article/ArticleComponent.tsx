@@ -17,8 +17,10 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
+  CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 
 interface Props {
   passedArticle: Article;
@@ -129,74 +131,81 @@ const ArticleComponent = ({ passedArticle }: Props) => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Article content - takes up more space on larger screens */}
         <div className="lg:w-2/3 w-full">
-          <div className="rounded-xl shadow-xl p-6 transition-all duration-300">
-            {article.image && (
-              <div className="relative w-full h-80 mb-6 rounded-lg overflow-hidden shadow-md">
-                <RenderImage image={article.image} alt={article.title} />
-              </div>
-            )}
-
-            <h1 className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
-              {article.title}
-            </h1>
-
-            <div className="text-gray-500 text-sm mt-2 mb-4">
-              By{" "}
-              <span className="font-semibold">
-                {article.author || "Unknown"}
-              </span>{" "}
-              | {new Date(article.publishedAt).toLocaleDateString()}
-            </div>
-
-            {data && article && !AiAnalysisLoading && !AiAnalysisError ? (
-              <div className="mt-4 p-4  rounded-lg shadow-sm">
-                <p className=" font-semibold">AI Analysis</p>
-                <div className="flex justify-between items-center mt-2">
-                  <span
-                    className={`text-sm font-medium ${
-                      data.getAIAnalysis.ai &&
-                      data.getAIAnalysis.ai.biasRating > 60
-                        ? "text-red-500"
-                        : "text-green-500"
-                    }`}>
-                    Bias Rating: {data?.getAIAnalysis?.ai?.biasRating}/100
-                  </span>
-                  <span className="text-sm font-medium  px-2 py-1 rounded-md">
-                    Worthiness: {data?.getAIAnalysis?.ai?.worthinessRating}/100
-                  </span>
+          <Card>
+            <CardHeader>
+              {article.image && (
+                <div className="relative w-full h-80 mb-6 rounded-lg overflow-hidden shadow-md">
+                  <RenderImage image={article.image} alt={article.title} />
                 </div>
-                <p className="mt-2 text-gray-700 dark:text-gray-300">
-                  <strong>Bias Reasoning:</strong>{" "}
-                  {data?.getAIAnalysis?.ai?.biasReasoning}
-                </p>
-              </div>
-            ) : (
-              <Skeleton className="mt-4 w-full h-24 rounded-lg" />
-            )}
-
-            <div className="mt-6  leading-relaxed border-t  pt-6">
-              {AiAnalysisLoading ? (
-                <Skeleton className="w-full h-24" />
-              ) : (
-                <p className="whitespace-pre-line">
-                  {!AiAnalysisError
-                    ? showSummary
-                      ? data?.getAIAnalysis?.ai?.summarizedContent
-                      : article.content
-                    : article.content}
-                </p>
               )}
-            </div>
 
-            {!AiAnalysisError && !AiAnalysisLoading && (
-              <Button
-                onClick={() => setShowSummary(!showSummary)}
-                className="mt-6 px-6 py-2 font-semibold transition-all">
-                {showSummary ? "Show Full Article" : "Show AI Summary"}
-              </Button>
-            )}
+              <CardTitle className="text-3xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight">
+                {" "}
+                {article.title}
+              </CardTitle>
+              <CardDescription>
+                By{" "}
+                <span className="font-semibold">
+                  {article.author || "Unknown"}
+                </span>{" "}
+                | {new Date(article.publishedAt).toLocaleDateString()}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {data && article && !AiAnalysisLoading && !AiAnalysisError ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>AI Analysis</CardTitle>
+                    <CardDescription className="flex justify-between items-center mt-2">
+                      <Badge
+                        variant={
+                          data.getAIAnalysis.ai &&
+                          data.getAIAnalysis.ai.biasRating > 60
+                            ? "destructive"
+                            : "outline"
+                        }>
+                        {" "}
+                        Bias Rating: {data?.getAIAnalysis?.ai?.biasRating}/100
+                      </Badge>
 
-            <div className="mt-6 flex justify-between items-center text-sm border-t  pt-4">
+                      <Badge>
+                        Worthiness: {data?.getAIAnalysis?.ai?.worthinessRating}
+                        /100
+                      </Badge>
+                    </CardDescription>
+                  </CardHeader>
+
+                  <CardContent>
+                    {data?.getAIAnalysis?.ai?.biasReasoning}
+                  </CardContent>
+                </Card>
+              ) : (
+                <Skeleton className="mt-4 w-full h-24 rounded-lg" />
+              )}
+
+              <div className="mt-6  leading-relaxed border-t  pt-6">
+                {AiAnalysisLoading ? (
+                  <Skeleton className="w-full h-24" />
+                ) : (
+                  <p className="whitespace-pre-line">
+                    {!AiAnalysisError
+                      ? showSummary
+                        ? data?.getAIAnalysis?.ai?.summarizedContent
+                        : article.content
+                      : article.content}
+                  </p>
+                )}
+              </div>
+
+              {!AiAnalysisError && !AiAnalysisLoading && (
+                <Button
+                  onClick={() => setShowSummary(!showSummary)}
+                  className="mt-6 px-6 py-2 cursor-pointer font-semibold transition-all">
+                  {showSummary ? "Show Full Article" : "Show AI Summary"}
+                </Button>
+              )}
+            </CardContent>
+            <CardFooter className="mt-6 flex justify-between items-center text-sm border-t  pt-4">
               <span>
                 Source: <strong>{article.source.name}</strong>
               </span>
@@ -207,8 +216,8 @@ const ArticleComponent = ({ passedArticle }: Props) => {
                 className="text-blue-600 hover:underline font-semibold">
                 Read Full Article
               </Link>
-            </div>
-          </div>
+            </CardFooter>
+          </Card>
         </div>
 
         {/* Comments section - fixed at top right on large screens, below article on smaller screens */}
