@@ -9,3 +9,11 @@ export const formatDate = (date: string): string => {
 
   return formatDistanceToNow(convertedDate, { addSuffix: true });
 };
+
+export const formatString = (str: string): string => {
+  if (str.length < 19) return str;
+
+  str = `${str.slice(0, 13).trim()}...`; // Trim to 19 characters
+
+  return str;
+};
