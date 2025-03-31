@@ -25,7 +25,7 @@ export function SearchBar() {
 
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get("q") || "");
+  const [query, setQuery] = useState(searchParams.get("p") || "");
   const pathname = usePathname();
 
   // these are the routes that should be skipped when searching, because the normal
@@ -50,17 +50,17 @@ export function SearchBar() {
     debounce((value: string) => {
       if (skipTheseRoutes) {
         setQuery(""); // Reset query when on skipped pages
-        router.replace(`/search?q=${encodeURIComponent(value)}`);
+        router.replace(`/search?p=${encodeURIComponent(value)}`);
       }
 
       if (value.trim().length === 0) {
         router.replace(`/`);
       } else if (value.trim().length > 2) {
         setQuery(""); // Reset query when on skipped pages
-        router.replace(`/search?q=${encodeURIComponent(value)}`);
+        router.replace(`/search?p=${encodeURIComponent(value)}`);
       }
     }, 1000),
-    [skipTheseRoutes]
+    [skipTheseRoutes],
   );
 
   useEffect(() => {
