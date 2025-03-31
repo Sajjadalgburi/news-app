@@ -116,6 +116,7 @@ export const GET_SINGLE_ARTICLE = gql(`query Query($input: String!) {
       ai {
         worthinessRating
         summarizedContent
+        biasReasoning
         biasRating
         createdAt
       }
@@ -133,6 +134,7 @@ export const GET_ARTICLE_AI_ANALYSIS = gql(`
     ai {
       worthinessRating
       summarizedContent
+      biasReasoning
       biasRating
     }
   }
