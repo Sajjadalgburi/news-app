@@ -24,7 +24,7 @@ const CommentCard = ({ comment, user, data, setData }: Props) => {
   return (
     <>
       <Card>
-        <CardHeader>
+        <CardHeader className="md:px-6 px-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Image
@@ -58,9 +58,7 @@ const CommentCard = ({ comment, user, data, setData }: Props) => {
             )}
           </div>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-gray-600">{comment.content}</p>
-        </CardContent>
+        <CardContent>{comment.content}</CardContent>
       </Card>
     </>
   );
