@@ -30,10 +30,10 @@ const Articles: React.FC<Props> = ({ articles, loading, error }) => {
               key={article.content?.slice(0, i) ?? ""}
               className={`break-inside-avoid rounded-xl shadow-xl p-4 ${
                 isFeatured
-                  ? "bg-gray-200"
+                  ? "bg-accent-foreground/25 dark:bg-accent-foreground/25"
                   : hasImage
-                  ? "bg-red-300/60"
-                  : "bg-red-400"
+                  ? "bg-accent-foreground/50 dark:bg-accent-foreground/50"
+                  : "bg-accent-foreground/75 dark:bg-accent-foreground/75"
               }`}>
               <ArticleCard
                 article={article}
