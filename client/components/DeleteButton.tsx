@@ -57,7 +57,7 @@ const DeleteButton = ({ className, commentId, data, setData }: Props) => {
       onClick={handleDeleteComment}
       disabled={deleteLoading}
       variant="destructive"
-      className={`${className} cursor-pointer`}>
+      className={`${className} cursor-pointer md:w-16 md:h-10 w-12 h-8`}>
       {deleteLoading ? "Deleting..." : "Delete"}
     </Button>
   );
