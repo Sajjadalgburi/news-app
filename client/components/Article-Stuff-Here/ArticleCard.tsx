@@ -7,7 +7,6 @@ import RenderImage from "../RenderImage";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -49,17 +48,21 @@ const ArticleCard: React.FC<Props> = ({
 
   return (
     <>
-      <Card className="block hover:shadow-lg hover:cursor-pointer hover:scale-[1.05] hover:underline transition-all duration-500 ease-in-out rounded-lg overflow-hidden">
+      <Card
+        className={`block ${
+          image && article.image ? "pt-0 pb-6" : "py-6"
+        }  hover:shadow-lg hover:cursor-pointer h-full hover:scale-[1.05] hover:underline transition-all duration-500 ease-in-out rounded-lg overflow-hidden`}>
         <a role="button" aria-disabled={loading} onClick={handleClick}>
-          <CardHeader>
+          <CardHeader className="px-0">
             {image && article.image && (
               <div
-                className={`relative w-full ${isFeatured ? "h-96" : "h-48"}`}>
+                className={`relative w-full top-0 ${
+                  isFeatured ? "h-96" : "h-48"
+                }`}>
                 <RenderImage image={article.image!} alt={article.title} />
               </div>
             )}{" "}
-            <CardTitle> {article.title}</CardTitle>
-            <CardDescription></CardDescription>
+            <CardTitle className="px-6">{article.title}</CardTitle>
           </CardHeader>
           {hasImage !== true && (
             <CardContent>
