@@ -1,4 +1,5 @@
 // npm install @apollo/server express graphql cors
+import "dotenv/config";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
@@ -7,13 +8,11 @@ import { resolvers } from "./graphql/reslovers";
 import fs from "fs";
 import path from "path";
 import connection from "./database/db";
-import "dotenv/config";
 import { ArticlesAPI } from "./api/datasource";
 import { validateJwtToken } from "./utils/jwt";
-import { cleanToken } from "./utils";
 import cookieParser from "cookie-parser";
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 // Required logic for integrating with Express
 const app = express();
@@ -35,7 +34,10 @@ const startServer = async () => {
   app.use(cookieParser()); // make sure to use parse the cookies before using them
   app.use(
     cors({
-      origin: "http://localhost:3000", // Allow requests from Next.js
+      origin:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : process.env.FRONTEND_URL, // Allow requests from Next.js
       credentials: true, // Allow cookies to be sent
     }), // cors only allows requests from the frontend and not from other domains
   );
@@ -75,9 +77,7 @@ const startServer = async () => {
   connection.once("open", () => {
     app.listen(PORT, () => {
       console.log(`
-    🚀  Server is running!
-    📭  Query at http://localhost:${PORT}/graphql
-  `);
+    🚀  Server is running!`);
     });
   });
 };
