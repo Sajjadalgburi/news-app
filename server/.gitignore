@@ -45,3 +45,9 @@ next-env.d.ts
 types.ts
 
 playground.ts
+node_modules
+dist
+coverage
+__tests__
+playground.ts
+jest.config.ts
