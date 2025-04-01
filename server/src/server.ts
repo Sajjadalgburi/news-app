@@ -35,7 +35,7 @@ const startServer = async () => {
   app.use(
     cors({
       origin:
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV !== "production" // Allow requests from the frontend
           ? "http://localhost:3000"
           : process.env.FRONTEND_URL, // Allow requests from Next.js
       credentials: true, // Allow cookies to be sent
@@ -77,7 +77,13 @@ const startServer = async () => {
   connection.once("open", () => {
     app.listen(PORT, () => {
       console.log(`
-    🚀  Server is running!`);
+    🚀  Server is running!
+    📭  Query at ${
+      process.env.NODE_ENV !== "production"
+        ? `http://localhost:${PORT}/graphql`
+        : `${process.env.BACKEND_URL}/graphql`
+    }
+    `);
     });
   });
 };
