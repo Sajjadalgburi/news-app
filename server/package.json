@@ -4,7 +4,7 @@
   "description": "This is the backend implementation for the News application.",
   "main": "index.js",
   "scripts": {
-    "build": "npm run gen && tsc --project tsconfig.build.json",
+    "build": "npm i && graphql-codegen && tsc --project tsconfig.build.json",
     "dev": "concurrently \"graphql-codegen\" \"ts-node-dev --respawn ./src/server.ts\"",
     "p": "ts-node-dev --respawn ./src/playground.ts",
     "gen": "graphql-codegen",
