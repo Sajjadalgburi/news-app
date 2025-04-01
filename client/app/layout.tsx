@@ -5,7 +5,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Header/Navbar";
 import CustomApolloProvider from "@/components/CustomApolloProvider";
 import { Toaster } from "react-hot-toast";
-import { cookies } from "next/headers";
 import { UserProvider } from "@/context/userContext";
 
 const geistSans = Geist({
@@ -61,18 +60,18 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("accessToken");
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <CustomApolloProvider>
-          <UserProvider token={token?.value ?? undefined}>
+          <UserProvider>
             <ThemeProvider
               attribute="class"
               defaultTheme="dark"
-              disableTransitionOnChange>
+              disableTransitionOnChange
+            >
               <Navbar />
               {children}
               <Toaster position="top-center" />
