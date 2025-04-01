@@ -309,7 +309,11 @@ export const resolvers: Resolvers = {
         res.cookie("accessToken", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
-          sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict", // Allows cross-origin cookies
+          domain:
+            process.env.NODE_ENV === "production"
+              ? "onrender.com"
+              : "localhost",
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // Allows cross-origin cookies
           maxAge: 60 * 60 * 60 * 1000,
         });
 
@@ -380,11 +384,14 @@ export const resolvers: Resolvers = {
 
         // Store the JWT token in cookies
         // Store the JWT token in cookies
-        res.cookie("accessToken", token, {
+        res.clearCookie("accessToken", {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
-          sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict", // Allows cross-origin cookies
-          maxAge: 60 * 60 * 60 * 1000,
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+          domain:
+            process.env.NODE_ENV === "production"
+              ? "onrender.com"
+              : "localhost",
         });
 
         return {
@@ -592,8 +599,12 @@ export const resolvers: Resolvers = {
         // Clear the accessToken cookie
         res.clearCookie("accessToken", {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
+          secure: process.env.NODE_ENV === "production" ? true : false,
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+          domain:
+            process.env.NODE_ENV === "production"
+              ? "onrender.com"
+              : "localhost",
         });
 
         // return success response
