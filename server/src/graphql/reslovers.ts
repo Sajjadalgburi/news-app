@@ -309,10 +309,6 @@ export const resolvers: Resolvers = {
         res.cookie("accessToken", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
-          domain:
-            process.env.NODE_ENV === "production"
-              ? "onrender.com"
-              : "localhost",
           sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", // Allows cross-origin cookies
           maxAge: 60 * 60 * 60 * 1000,
         });
@@ -388,10 +384,6 @@ export const resolvers: Resolvers = {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
           sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-          domain:
-            process.env.NODE_ENV === "production"
-              ? "onrender.com"
-              : "localhost",
         });
 
         return {
@@ -601,10 +593,6 @@ export const resolvers: Resolvers = {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
           sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-          domain:
-            process.env.NODE_ENV === "production"
-              ? "onrender.com"
-              : "localhost",
         });
 
         // return success response
