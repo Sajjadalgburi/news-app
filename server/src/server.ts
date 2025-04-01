@@ -5,12 +5,11 @@ import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import cors from "cors";
 import { resolvers } from "./graphql/reslovers";
-import fs from "fs";
-import path from "path";
 import connection from "./database/db";
 import { ArticlesAPI } from "./api/datasource";
 import { validateJwtToken } from "./utils/jwt";
 import cookieParser from "cookie-parser";
+import { typeDefs } from "./graphql/schema";
 
 const PORT = process.env.PORT;
 
@@ -20,10 +19,7 @@ const app = express();
 // Same ApolloServer initialization as before, plus the drain plugin
 // for our httpServer.
 const server = new ApolloServer({
-  typeDefs: fs.readFileSync(
-    path.join(__dirname, "./graphql/schema.graphql"),
-    "utf-8",
-  ),
+  typeDefs,
   resolvers,
 });
 
