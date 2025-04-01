@@ -9,6 +9,13 @@ import useUser from "@/hooks/useUser";
 import { Article } from "@/__generated__/graphql";
 import ProfileLoading from "@/components/Profile/ProfileLoading";
 import CutomError from "@/components/CustomError";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const ProfilePage: React.FC = () => {
   const searchParams = useSearchParams();
@@ -36,18 +43,18 @@ const ProfilePage: React.FC = () => {
   const user = userData?.getUser;
   if (!user) return <CutomError error={`User with ID ${userId} not found`} />;
 
-  const isLoggedInUser = loggedInUser?.id === user.id;
+  const isCurrentUser = loggedInUser?.id === user.id;
 
   return (
-    <div className="min-h-screen flex flex-col items-center  p-6">
-      <div className="w-full max-w-2xl  p-6 rounded-lg shadow-lg">
-        <>
+    <Card className="w-[90vw] max-w-2xl max-h-[75vh] md:max-h-[80vh]  overflow-y-auto mx-auto my-5 md:p-6 p-3">
+      <CardHeader>
+        <CardTitle>
           <h1 className="text-2xl font-bold mb-4 text-center">
-            {isLoggedInUser ? "Your" : `${user.name}'s `} Profile
+            {isCurrentUser ? "Your" : `${user.name}'s `} Profile
           </h1>
           <p className="text-lg">
             <span className="font-semibold">
-              {isLoggedInUser ? "Your" : "User's"} Unique ID:
+              {isCurrentUser ? "Your" : "User's"} Unique ID:
             </span>{" "}
             {user.id}
           </p>
@@ -59,33 +66,36 @@ const ProfilePage: React.FC = () => {
               <span className="font-semibold">Email:</span> {user.email}
             </p>
           )}
-          <div>
-            <h2>{isLoggedInUser ? "Your" : "User's"} Past Comments</h2>
-            {user.comments && user.comments.length > 0 ? (
-              user.comments.map((c) => {
-                if (!c) return null;
+        </CardTitle>
+        <CardDescription>
+          {isCurrentUser ? "Your" : "User's"} Past Comments
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {" "}
+        <div className="flex flex-col gap-3">
+          {user.comments && user.comments.length > 0 ? (
+            user.comments.map((c) => {
+              if (!c) return null;
 
-                return (
-                  <CommentCard
-                    key={c.id}
-                    comment={c}
-                    user={loggedInUser}
-                    setData={() => {}} // Provide a placeholder function for setArticle
-                    data={{} as Article} // Provide a placeholder for data
-                  />
-                );
-              })
-            ) : (
-              <p className="mt-4 text-gray-400">
-                {isLoggedInUser
-                  ? "You have no comments"
-                  : "User has no comments"}
-              </p>
-            )}
-          </div>
-        </>
-      </div>
-    </div>
+              return (
+                <CommentCard
+                  key={c.id}
+                  comment={c}
+                  user={loggedInUser}
+                  setData={() => {}} // Provide a placeholder function for setArticle
+                  data={{} as Article} // Provide a placeholder for data
+                />
+              );
+            })
+          ) : (
+            <p className="mt-4 text-gray-400">
+              {isCurrentUser ? "You have no comments" : "User has no comments"}
+            </p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
