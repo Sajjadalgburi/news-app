@@ -10,6 +10,7 @@ import { ArticlesAPI } from "./api/datasource";
 import { validateJwtToken } from "./utils/jwt";
 import cookieParser from "cookie-parser";
 import { typeDefs } from "./graphql/schema";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 
 // Required logic for integrating with Express
 const app = express();
@@ -103,11 +104,10 @@ const startServer = async () => {
   return app;
 };
 
-// For serverless environment, start the server and export the app
+// Start server and expose it for Vercel's serverless functions
 let serverPromise = startServer();
 
-// Export a handler for serverless functions
-export default async function handler(req, res) {
+export default async (req: VercelRequest, res: VercelResponse) => {
   const appInstance = await serverPromise;
   return appInstance(req, res);
-}
+};
