@@ -7,7 +7,8 @@ export const singleArticle: Article = {
     "Artificial Intelligence is transforming the tech industry at an unprecedented pace. Experts predict major advancements in the coming years.",
   description:
     "AI is reshaping the tech landscape with groundbreaking innovations.",
-  image: "https://example.com/ai-revolution.jpg",
+  image:
+    "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
   publishedAt: "2023-10-01T10:00:00Z",
   url: "https://example.com/ai-revolution",
   source: {
@@ -46,9 +47,11 @@ export const multipleArticles: Article[] = [
       "Artificial Intelligence is transforming the tech industry at an unprecedented pace. Experts predict major advancements in the coming years.",
     description:
       "AI is reshaping the tech landscape with groundbreaking innovations.",
-    image: "https://example.com/ai-revolution.jpg",
+    image:
+      "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png",
     publishedAt: "2023-10-01T10:00:00Z",
     url: "https://example.com/ai-revolution",
+    author: "awdawdawdaawdawddddddddddddddddddddddddddddd",
     source: {
       id: "tech-news",
       name: "Tech News Daily",
