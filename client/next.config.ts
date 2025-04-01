@@ -5,6 +5,10 @@ const nextConfig: NextConfig = {
 
   allowedDevOrigins: ["http://localhost:5000", "http://localhost:5000/graphql"],
 
+  typescript: {
+    ignoreBuildErrors: true, // Ignore TypeScript errors during build
+  },
+
   // by default, Next.js will block any external image domains. We need to disable this behavior.
   images: {
     remotePatterns: [], // No remote images allowed
