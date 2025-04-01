@@ -7,59 +7,74 @@ import { decode } from "jsonwebtoken";
 interface UserContextProps {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  isLoading: boolean;
 }
 
-export const UserContext = createContext<UserContextProps | null>(null);
+export const UserContext = createContext<UserContextProps>({
+  user: null,
+  setUser: () => {},
+  isLoading: true,
+});
 
 interface UserProviderProps {
-  token?: string;
   children: React.ReactNode;
 }
 
-/**
- * Custom provider to manage user state. This will decode the JWT token and set the user in context.
- * We will then have the user available in the context for all components that need it.
- * @param {string} token - JWT token to decode and set the user in context.
- * @return Provider with user state and setter function.
- */
-export const UserProvider: React.FC<UserProviderProps> = ({
-  token: initialToken,
-  children,
-}) => {
-  const [token, setToken] = useState<string | undefined>(initialToken);
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch token on mount (only in browser)
+  // Fetch and decode token on mount and whenever token state might change
   useEffect(() => {
-    if (!token) {
-      async function fetchToken() {
-        try {
-          const res = await fetch("/api/session", { credentials: "include" });
-          if (!res.ok) throw new Error("Failed to fetch token");
+    async function checkSession() {
+      try {
+        setIsLoading(true);
+        const res = await fetch("/api/session", { credentials: "include" });
 
-          const data = await res.json();
-          if (data.token) setToken(data.token);
-        } catch (error) {
-          console.error("Error fetching token:", error);
+        if (!res.ok) {
+          setUser(null);
+          return;
         }
-      }
-      fetchToken();
-    }
-  }, [token]); // Runs only if token is undefined
 
-  // Decode user from token
-  const user = useMemo(() => {
-    if (!token) return null;
-    try {
-      return decode(token) as User;
-    } catch (error) {
-      console.error("Failed to decode token:", error);
-      return null;
+        const data = await res.json();
+        if (data.token) {
+          try {
+            const decodedUser = decode(data.token) as User;
+            setUser(decodedUser);
+          } catch (error) {
+            console.error("Failed to decode token:", error);
+            setUser(null);
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, [token]);
+
+    checkSession();
+
+    // Set up an interval to periodically check for session changes
+    const intervalId = setInterval(checkSession, 30000); // Check every minute
+
+    // Clean up interval on unmount
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({
+      user,
+      setUser,
+      isLoading,
+    }),
+    [user, isLoading]
+  );
 
   return (
-    <UserContext.Provider value={{ user, setUser: () => {} }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
   );
 };
