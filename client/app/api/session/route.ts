@@ -1,8 +1,7 @@
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  const cookieStore = await cookies(); // Awaiting since it's now a Promise
-  const token = cookieStore.get("accessToken")?.value;
+export async function GET(req: NextRequest) {
+  const token = req.cookies.get("accessToken")?.value;
+
   return NextResponse.json({ token });
 }
