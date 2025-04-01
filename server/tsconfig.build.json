@@ -4,8 +4,7 @@
     "node_modules",
     "__tests__",
     "jest.config.ts",
-    "playground.ts",
-    "src/__tests__",
-    "types"
+    "coverage",
+    "playground.ts"
   ]
 }

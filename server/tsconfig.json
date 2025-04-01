@@ -1,24 +1,22 @@
 {
   "compilerOptions": {
-    "rootDir": "./",
+    "rootDir": "src",
     "outDir": "dist",
     "target": "es2020",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "module": "commonjs"
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "skipLibCheck": true
   },
+  "include": ["src"],
   "exclude": [
     "node_modules",
     "dist",
     "__tests__",
-    "types",
     "coverage",
-    "scripts"
-  ],
-  "include": [
-    "src/**/*.ts",
-    "__tests__/**/*.ts",
-    "scripts/**/*.ts",
-    "types/**/*.ts"
+    "scripts",
+    "jest.config.ts",
+    "playground.ts"
   ]
 }
