@@ -86,7 +86,9 @@ const startServer = async () => {
   app.get("/api/health", (req, res) => {
     res.status(200).send("Server is running");
   });
-
+  app.get("/", (req, res) => {
+    res.send("News API Backend is running! Try /graphql endpoint.");
+  });
   // For local development
   if (process.env.NODE_ENV !== "production") {
     const PORT = process.env.PORT || 4000;
