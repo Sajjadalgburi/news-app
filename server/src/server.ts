@@ -25,11 +25,12 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  introspection: true, // Enable introspection for GraphQL Playground
   plugins: [
     // Install a landing page plugin based on NODE_ENV
     process.env.NODE_ENV === "production"
       ? ApolloServerPluginLandingPageProductionDefault({
-          graphRef: "my-graph-id@my-graph-variant",
+          graphRef: process.env.APOLLO_GRAPH_REF,
           footer: false,
         })
       : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
