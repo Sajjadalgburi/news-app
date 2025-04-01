@@ -7,5 +7,18 @@
     "esModuleInterop": true,
     "module": "commonjs"
   },
-  "exclude": ["node_modules", "dist", "__tests__"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "__tests__",
+    "types",
+    "coverage",
+    "scripts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "__tests__/**/*.ts",
+    "scripts/**/*.ts",
+    "types/**/*.ts"
+  ]
 }
