@@ -23,13 +23,31 @@ interface UserProviderProps {
  * @return Provider with user state and setter function.
  */
 export const UserProvider: React.FC<UserProviderProps> = ({
-  token,
+  token: initialToken,
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | undefined>(initialToken);
 
-  // Decode user only when token changes
-  const decodedUser = useMemo(() => {
+  // Fetch token on mount (only in browser)
+  useEffect(() => {
+    if (!token) {
+      async function fetchToken() {
+        try {
+          const res = await fetch("/api/session", { credentials: "include" });
+          if (!res.ok) throw new Error("Failed to fetch token");
+
+          const data = await res.json();
+          if (data.token) setToken(data.token);
+        } catch (error) {
+          console.error("Error fetching token:", error);
+        }
+      }
+      fetchToken();
+    }
+  }, [token]); // Runs only if token is undefined
+
+  // Decode user from token
+  const user = useMemo(() => {
     if (!token) return null;
     try {
       return decode(token) as User;
@@ -39,12 +57,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({
     }
   }, [token]);
 
-  useEffect(() => {
-    setUser(decodedUser);
-  }, [decodedUser]);
-
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser: () => {} }}>
       {children}
     </UserContext.Provider>
   );
