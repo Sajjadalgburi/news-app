@@ -10,6 +10,10 @@ import { ArticlesAPI } from "./api/datasource";
 import { validateJwtToken } from "./utils/jwt";
 import cookieParser from "cookie-parser";
 import { typeDefs } from "./graphql/schema";
+import {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} from "@apollo/server/plugin/landingPage/default";
 
 const PORT = process.env.PORT;
 
@@ -21,6 +25,15 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  plugins: [
+    // Install a landing page plugin based on NODE_ENV
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageProductionDefault({
+          graphRef: "my-graph-id@my-graph-variant",
+          footer: false,
+        })
+      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+  ],
 });
 
 const startServer = async () => {
