@@ -13,7 +13,7 @@ const RenderImage = ({ ...props }: Props) => {
       alt={props.alt}
       priority={true}
       fill
-      className={`rounded-t-xl object-cover`}
+      className={`rounded-t-md object-cover`}
     />
   );
 };
