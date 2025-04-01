@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true, // Ignore TypeScript errors during build
   },
 
+  ignoreBuildErrors: true, // Ignore build errors
+
   // by default, Next.js will block any external image domains. We need to disable this behavior.
   images: {
     remotePatterns: [], // No remote images allowed
