@@ -75,6 +75,10 @@ const startServer = async () => {
 
         const user = validateJwtToken(cookiesToken);
 
+        if (!user) {
+          console.log("\n---no user exists from the cookies token---\n");
+        }
+
         return {
           expressObjects: { req, res },
           user: user || null, // Ensure user is null if token validation fails
