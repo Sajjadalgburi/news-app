@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, Suspense } from "react";
 import { debounce } from "lodash";
 import { usePathname } from "next/navigation";
 
@@ -28,8 +28,6 @@ export function SearchBar() {
   const [query, setQuery] = useState(searchParams.get("p") || "");
   const pathname = usePathname();
 
-  // these are the routes that should be skipped when searching, because the normal
-  // behavior always resets to the '/search' route if there is an input or the homepage when the search is empty
   const skipTheseRoutes = useMemo(() => {
     const skipPages = [
       "/login",
@@ -60,7 +58,7 @@ export function SearchBar() {
         router.replace(`/search?p=${encodeURIComponent(value)}`);
       }
     }, 1000),
-    [skipTheseRoutes],
+    [skipTheseRoutes]
   );
 
   useEffect(() => {
@@ -95,5 +93,13 @@ export function SearchBar() {
         </form>
       </Form>
     </div>
+  );
+}
+
+export function SuspenseSearchBar() {
+  return (
+    <Suspense fallback={<div>Loading search...</div>}>
+      <SearchBar />
+    </Suspense>
   );
 }

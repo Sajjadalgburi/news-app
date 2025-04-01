@@ -6,6 +6,7 @@ import Navbar from "@/components/Header/Navbar";
 import CustomApolloProvider from "@/components/CustomApolloProvider";
 import { Toaster } from "react-hot-toast";
 import { UserProvider } from "@/context/userContext";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,21 +64,21 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <CustomApolloProvider>
-          <UserProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              disableTransitionOnChange
-            >
-              <Navbar />
-              {children}
-              <Toaster position="top-center" />
-            </ThemeProvider>
-          </UserProvider>
-        </CustomApolloProvider>
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <CustomApolloProvider>
+            <UserProvider>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="dark"
+                disableTransitionOnChange>
+                <Navbar />
+                {children}
+                <Toaster position="top-center" />
+              </ThemeProvider>
+            </UserProvider>
+          </CustomApolloProvider>{" "}
+        </Suspense>
       </body>
     </html>
   );

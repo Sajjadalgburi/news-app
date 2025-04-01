@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import CommentCard from "@/components/CommentCard";
 import { useQuery } from "@apollo/client";
@@ -46,56 +46,60 @@ const ProfilePage: React.FC = () => {
   const isCurrentUser = loggedInUser?.id === user.id;
 
   return (
-    <Card className="w-[90vw] max-w-2xl max-h-[75vh] md:max-h-[80vh]  overflow-y-auto mx-auto my-5 md:p-6 p-3">
-      <CardHeader>
-        <CardTitle>
-          <h1 className="text-2xl font-bold mb-4 text-center">
-            {isCurrentUser ? "Your" : `${user.name}'s `} Profile
-          </h1>
-          <p className="text-lg">
-            <span className="font-semibold">
-              {isCurrentUser ? "Your" : "User's"} Unique ID:
-            </span>{" "}
-            {user.id}
-          </p>
-          <p className="text-lg">
-            <span className="font-semibold">Name:</span> {user.name}
-          </p>
-          {user.email && (
+    <Suspense fallback={<ProfileLoading />}>
+      <Card className="w-[90vw] max-w-2xl max-h-[75vh] md:max-h-[80vh]  overflow-y-auto mx-auto my-5 md:p-6 p-3">
+        <CardHeader>
+          <CardTitle>
+            <h1 className="text-2xl font-bold mb-4 text-center">
+              {isCurrentUser ? "Your" : `${user.name}'s `} Profile
+            </h1>
             <p className="text-lg">
-              <span className="font-semibold">Email:</span> {user.email}
+              <span className="font-semibold">
+                {isCurrentUser ? "Your" : "User's"} Unique ID:
+              </span>{" "}
+              {user.id}
             </p>
-          )}
-        </CardTitle>
-        <CardDescription>
-          {isCurrentUser ? "Your" : "User's"} Past Comments
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {" "}
-        <div className="flex flex-col gap-3">
-          {user.comments && user.comments.length > 0 ? (
-            user.comments.map((c) => {
-              if (!c) return null;
+            <p className="text-lg">
+              <span className="font-semibold">Name:</span> {user.name}
+            </p>
+            {user.email && (
+              <p className="text-lg">
+                <span className="font-semibold">Email:</span> {user.email}
+              </p>
+            )}
+          </CardTitle>
+          <CardDescription>
+            {isCurrentUser ? "Your" : "User's"} Past Comments
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {" "}
+          <div className="flex flex-col gap-3">
+            {user.comments && user.comments.length > 0 ? (
+              user.comments.map((c) => {
+                if (!c) return null;
 
-              return (
-                <CommentCard
-                  key={c.id}
-                  comment={c}
-                  user={loggedInUser}
-                  setData={() => {}} // Provide a placeholder function for setArticle
-                  data={{} as Article} // Provide a placeholder for data
-                />
-              );
-            })
-          ) : (
-            <p className="mt-4 text-gray-400">
-              {isCurrentUser ? "You have no comments" : "User has no comments"}
-            </p>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+                return (
+                  <CommentCard
+                    key={c.id}
+                    comment={c}
+                    user={loggedInUser}
+                    setData={() => {}} // Provide a placeholder function for setArticle
+                    data={{} as Article} // Provide a placeholder for data
+                  />
+                );
+              })
+            ) : (
+              <p className="mt-4 text-gray-400">
+                {isCurrentUser
+                  ? "You have no comments"
+                  : "User has no comments"}
+              </p>
+            )}
+          </div>
+        </CardContent>
+      </Card>{" "}
+    </Suspense>
   );
 };
 

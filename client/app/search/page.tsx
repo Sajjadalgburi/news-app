@@ -4,6 +4,7 @@ import Articles from "@/components/Article-Stuff-Here/Articles";
 import { GET_ARTICLE_BASED_ON_SEARCH } from "@/graphql/queries";
 import { useQuery } from "@apollo/client";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 const SearchPage = () => {
   const params = useSearchParams();
@@ -53,22 +54,24 @@ const SearchPage = () => {
     );
 
   return (
-    <section className="max-w-6xl mx-auto px-6 py-8">
-      <header className="mb-6 text-center">
-        <h1 className="text-3xl font-bold text-gray-800">
-          Search Results for &quot;{searchQuery}&quot;
-        </h1>
-        <p className="mt-1 text-gray-600">
-          Found {dataLength} {dataLength === 1 ? "article" : "articles"}
-        </p>
-      </header>
+    <Suspense fallback={<div>Loading...</div>}>
+      <section className="max-w-6xl mx-auto px-6 py-8">
+        <header className="mb-6 text-center">
+          <h1 className="text-3xl font-bold text-gray-800">
+            Search Results for &quot;{searchQuery}&quot;
+          </h1>
+          <p className="mt-1 text-gray-600">
+            Found {dataLength} {dataLength === 1 ? "article" : "articles"}
+          </p>
+        </header>
 
-      <Articles
-        articles={data?.getArticlesBasedOnSearch as Article[]}
-        loading={loading}
-        error={error}
-      />
-    </section>
+        <Articles
+          articles={data?.getArticlesBasedOnSearch as Article[]}
+          loading={loading}
+          error={error}
+        />
+      </section>{" "}
+    </Suspense>
   );
 };
 
