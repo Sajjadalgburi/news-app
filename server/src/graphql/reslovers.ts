@@ -309,7 +309,7 @@ export const resolvers: Resolvers = {
         res.cookie("accessToken", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
-          sameSite: "lax", // Allows cross-origin cookies
+          sameSite: "none", // Allows cross-origin cookies
           maxAge: 60 * 60 * 60 * 1000,
         });
 
@@ -383,7 +383,7 @@ export const resolvers: Resolvers = {
         res.cookie("accessToken", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production" ? true : false,
-          sameSite: "lax", // Allows cross-origin cookies
+          sameSite: "none", // Allows cross-origin cookies
           maxAge: 60 * 60 * 60 * 1000,
         });
 
@@ -593,7 +593,7 @@ export const resolvers: Resolvers = {
         res.clearCookie("accessToken", {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
-          sameSite: "lax",
+          sameSite: "none",
         });
 
         // return success response
