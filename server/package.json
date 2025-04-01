@@ -9,8 +9,8 @@
     "p": "ts-node-dev --respawn ./src/playground.ts",
     "gen": "graphql-codegen",
     "test": "jest",
-    "start": "node ./dist/src/server.js",
-    "render": "npm install && npm run build && npm run gen && npm run start",
+    "start": "node ./dist/server.js",
+    "render": "npm install && npm run gen && npm run build && npm run start",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
