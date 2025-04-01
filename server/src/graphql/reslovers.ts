@@ -308,8 +308,8 @@ export const resolvers: Resolvers = {
         // Store the JWT token in cookies
         res.cookie("accessToken", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
+          secure: process.env.NODE_ENV === "production" ? true : false,
+          sameSite: "none", // Allows cross-origin cookies
           maxAge: 60 * 60 * 60 * 1000,
         });
 
@@ -379,10 +379,11 @@ export const resolvers: Resolvers = {
         });
 
         // Store the JWT token in cookies
+        // Store the JWT token in cookies
         res.cookie("accessToken", token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "strict",
+          secure: process.env.NODE_ENV === "production" ? true : false,
+          sameSite: "none", // Allows cross-origin cookies
           maxAge: 60 * 60 * 60 * 1000,
         });
 
