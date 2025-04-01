@@ -14,4 +14,10 @@ const fakeiInput: ArticleModel = {
     id: "1",
     name: "Test",
   },
+  ai: {
+    biasRating: 9,
+    biasReasoning: "some reason here",
+    summarizedContent: "blah blahblah blahblah blahblah blahblah blah",
+    worthinessRating: 90,
+  },
 };
