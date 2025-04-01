@@ -4,11 +4,13 @@
   "description": "This is the backend implementation for the News application.",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
+    "build": "tsc",
     "dev": "concurrently \"graphql-codegen\" \"ts-node-dev --respawn ./src/server.ts\"",
     "p": "ts-node-dev --respawn ./src/playground.ts",
     "gen": "graphql-codegen",
     "test": "jest",
+    "start": "node ./dist/src/server.js",
+    "install-and-build": "npm install && npm run build",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
