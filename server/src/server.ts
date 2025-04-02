@@ -45,7 +45,7 @@ const startServer = async () => {
   app.use(
     cors({
       origin:
-        process.env.NODE_ENV !== "production" // Allow requests from the frontend
+        process.env.NODE_ENV === "development" // Allow requests from the frontend
           ? "http://localhost:3000"
           : process.env.FRONTEND_URL, // Allow requests from Next.js
       credentials: true, // Allow cookies to be sent
