@@ -12,7 +12,7 @@ const cache = new InMemoryCache();
 const client = new ApolloClient({
   link: new HttpLink({
     uri:
-      process.env.NODE_ENV !== "production"
+      process.env.NODE_ENV === "development"
         ? "http://localhost:5000/graphql"
         : `${process.env.NEXT_PUBLIC_BACKEND_URL}/graphql`,
     credentials: "include",
