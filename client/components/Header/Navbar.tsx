@@ -43,9 +43,6 @@ const Navbar = () => {
           {categories.map((c) => (
             <CatagoryTitle key={c.name} name={c.name} />
           ))}
-          {process.env.NODE_ENV === "development" && (
-            <Link href={"/testing"}>Test</Link>
-          )}
         </div>
 
         {/* Desktop */}
